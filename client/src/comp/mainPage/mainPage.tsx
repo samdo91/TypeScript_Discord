@@ -1,11 +1,11 @@
 import { useAtom } from "jotai";
 import React, { useEffect } from "react";
-import { loginStateAtom } from "../../global/global";
+import { loginStateAtom, userDataAtom } from "../../global/global";
 import axios from "axios";
 
 function MainPage() {
   const [loginState, setLoginState] = useAtom(loginStateAtom); // 로그인 모달 불러오기
-
+  const [userData, setUserData] = useAtom(userDataAtom); // 로그인에 성공하면 유저데이터 저장
   // 로그인스테이트를 확인하고 이게 false일때 loginPage로 직접 연결
   // 이후 자동 로그인을 만들때 쿠키로 로그인 데이터를 확인하고 로그인과 loginState를 변경하는 useEffect만들것
 
@@ -40,7 +40,16 @@ function MainPage() {
 
         // /profile 엔드포인트가 성공적으로 응답하는 경우
         console.log("User profile:", response.data);
-
+        const useData = response.data;
+        setUserData({
+          birthDate: useData.birthDate,
+          email: useData.email,
+          password: useData.password,
+          nickname: useData.nickname,
+          sendMail: useData.sendMail,
+          userName: useData.userName,
+          _id: useData._id,
+        });
         setLoginState(true);
       } catch (error: any) {
         // Axios 에러 객체인 경우

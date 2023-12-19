@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useAtom } from "jotai";
-import { loginStateAtom } from "../../../global/global";
+import { loginStateAtom, userDataAtom } from "../../../global/global";
+import { interUserData } from "../../../store/interface";
 type TextProps = {
   fontSize: string;
 };
 
-interface interUserData {
+interface interLoginUserData {
   id: string;
   password: string;
 }
@@ -17,19 +18,19 @@ interface LoginResponse {
   token: string;
   status: string;
   message: string;
+  userData: interUserData;
   // 다른 필요한 속성 추가
 }
 function LoginScreen() {
   const [currentId, setCurrentId] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
-
   const [loginState, setLoginState] = useAtom(loginStateAtom);
-
+  const [userData, setUserData] = useAtom(userDataAtom);
   // response의 구조에 따라 타입 정의
 
   // handleLoginButton 함수 내에서 반환 타입 지정
   const handleLoginButton = async (): Promise<void> => {
-    const userData: interUserData = {
+    const userData: interLoginUserData = {
       id: currentId,
       password: currentPassword,
     };
@@ -41,13 +42,23 @@ function LoginScreen() {
       );
 
       if (response.data.status === "success") {
-        console.log("Login successful:", response.data.message);
+        // 로그인 성공 후 필요한 동작을 수행하세요.
 
+        console.log("Login successful:", response.data.message);
         // Set the received token as a cookie
         Cookies.set("token", response.data.token);
         setLoginState(true);
+        const useData = response.data.userData;
+        setUserData({
+          birthDate: useData.birthDate,
+          email: useData.email,
+          password: useData.password,
+          nickname: useData.nickname,
+          sendMail: useData.sendMail,
+          userName: useData.userName,
+          _id: useData._id,
+        });
         window.location.href = "/";
-        // 로그인 성공 후 필요한 동작을 수행하세요.
       } else {
         console.error("Login failed:", response.data.message);
         // 로그인 실패 시 필요한 동작을 수행하세요.

@@ -166,14 +166,6 @@ const Star = styled.div`
   margin-left: 5px;
 `;
 
-const Field = styled.input`
-  width: 34vw;
-  padding: 10px;
-  box-sizing: border-box;
-  font-size: 40px;
-  border-radius: 4px;
-`;
-
 const Checkbox = styled.input`
   width: 30px;
   height: 30px;

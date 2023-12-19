@@ -70,6 +70,7 @@ app.post("/login", async function (req, res) {
         expiresIn: "1h",
       });
       res.json({
+        userData: user,
         status: "success",
         message: "Login successful.",
         token: token,
