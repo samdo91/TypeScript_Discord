@@ -6,3 +6,6 @@ export interface interSignupData {
   sendMail: boolean;
   birthDate: string;
 }
+export interface interRequiredFieldIndicator {
+  requiredFieldIndicator: boolean;
+}
