@@ -1,8 +1,11 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import BirthDate from "./birthDate";
-import { interSignupData } from "../../../store/interface";
 import axios from "axios";
+import SignupItemEmail from "./item/signupItemEmail";
+import SignupItemNickname from "./item/signupItemNickname";
+import SignupItemUserName from "./item/signupItemUserName";
+import SignupPassword from "./item/signupItemPassword";
 
 function SignScreen() {
   const [email, setEmail] = useState<string>("");
@@ -28,7 +31,42 @@ function SignScreen() {
   const handleCheckboxChange = () => {
     setSendMail((prevSendMail) => !prevSendMail);
   };
+
+  const passwordTest = (str: string): boolean =>
+    /^[a-zA-Z0-9_\uAC00-\uD7A3]{8,23}$/.test(str);
+
+  const userNameTest = (str: string): boolean =>
+    /^[a-zA-Z0-9_\uAC00-\uD7A3]+$/.test(str);
+
+  const isRequiredFieldIndicator = (str: string): boolean => str.trim() !== "";
   const handleContinueButton = async () => {
+    if (!userNameTest(userName)) {
+      // 사용자에게 친화적인 오류 메시지를 표시하세요
+      alert(
+        "유효하지 않은 사용자 이름입니다. 영숫자 문자 및 밑줄(_)만 사용하세요."
+      );
+      return;
+    }
+
+    if (!passwordTest(password)) {
+      // 사용자에게 친화적인 오류 메시지를 표시하세요
+      alert(
+        "유효하지 않은 암호입니다. 암호는 8-23자 여야하며 영숫자 문자 및 밑줄(_)만 사용하세요."
+      );
+      return;
+    }
+
+    if (!isRequiredFieldIndicator(years)) {
+      alert("생년월일이 비어있어요.");
+      return;
+    } else if (!isRequiredFieldIndicator(months)) {
+      alert("생년월일이 비어있어요.");
+      return;
+    } else if (!isRequiredFieldIndicator(days)) {
+      alert("생년월일이 비어있어요.");
+      return;
+    }
+
     const newSignupData = {
       email: email,
       nickname: nickname,
@@ -39,77 +77,27 @@ function SignScreen() {
     };
 
     try {
-      // 서버로 데이터를 전송하는 POST 요청
+      // 암호를 저장하기 전에 서버에서 암호화 처리를 수행하세요
       const response = await axios.post(
         "http://localhost:3000/signup",
         newSignupData
       );
 
-      // 서버 응답 출력
-      console.log("Server response:", response.data);
-      window.location.href = "/signupSucces";
+      console.log("서버 응답:", response.data);
+      // React Router 또는 다른 적절한 방법을 사용하여 리디렉션 수행
     } catch (error: any) {
-      // 여기서 `error`를 명시적으로 any 형식으로 선언
-      // 오류 처리
-      console.error("Error sending data to server:", error.message);
+      console.error("서버로 데이터 전송 중 오류 발생:", error.message);
+      // 서버에서의 다양한 오류 시나리오를 처리하고 사용자에게 친화적인 메시지를 제공하세요
     }
   };
+
   return (
     <SignScreens>
       <Title>계정만들기</Title>
-
-      <ItemSection>
-        <Label>
-          <ItemName>이메일</ItemName>
-          <Star> * </Star>
-        </Label>
-        <Field
-          type="text"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
-      </ItemSection>
-      <ItemSection>
-        <Label>
-          <ItemName>별명</ItemName>
-          <Star />
-        </Label>
-        <Field
-          type="text"
-          value={nickname}
-          onChange={(e) => {
-            setNickname(e.target.value);
-          }}
-        />
-      </ItemSection>
-      <ItemSection>
-        <Label>
-          <ItemName>사용자명</ItemName>
-          <Star> * </Star>
-        </Label>
-        <Field
-          type="text"
-          value={userName}
-          onChange={(e) => {
-            setUserName(e.target.value);
-          }}
-        />
-      </ItemSection>
-      <ItemSection>
-        <Label>
-          <ItemName>비밀번호</ItemName>
-          <Star> * </Star>
-        </Label>
-        <Field
-          type="text"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-      </ItemSection>
+      <SignupItemEmail email={email} setEmail={setEmail} />
+      <SignupItemNickname nickname={nickname} setNickname={setNickname} />
+      <SignupItemUserName userName={userName} setUserName={setUserName} />
+      <SignupPassword password={password} setPassword={setPassword} />
 
       <ItemSection>
         <Label>
