@@ -9,3 +9,7 @@ export interface interSignupData {
 export interface interRequiredFieldIndicator {
   requiredFieldIndicator: boolean;
 }
+
+export interface interUserData extends interSignupData {
+  _id: string;
+}
