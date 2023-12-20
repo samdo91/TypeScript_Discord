@@ -2,6 +2,7 @@ import { useAtom } from "jotai";
 import React, { useEffect } from "react";
 import { loginStateAtom, userDataAtom } from "../../global/global";
 import axios from "axios";
+import MainHeader from "./mainHeader/mainHeader";
 
 function MainPage() {
   const [loginState, setLoginState] = useAtom(loginStateAtom); // 로그인 모달 불러오기
@@ -75,7 +76,14 @@ function MainPage() {
     checkLoginStatus();
   }, []); // 빈 배열은 한 번만 실행되도록 함
 
-  return <div>MainPage</div>;
+  return (
+    <div>
+      <header>
+        <MainHeader />
+      </header>
+      MainPage
+    </div>
+  );
 }
 
 export default MainPage;
