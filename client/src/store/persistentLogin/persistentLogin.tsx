@@ -73,7 +73,7 @@ function PersistentLogin() {
 
   // checkLoginStatus 함수를 호출
 
-  return <div>persistentLogin</div>;
+  return <div></div>;
 }
 
 export default PersistentLogin;
