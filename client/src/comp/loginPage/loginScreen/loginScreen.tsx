@@ -43,7 +43,6 @@ function LoginScreen() {
 
       if (response.data.status === "success") {
         // 로그인 성공 후 필요한 동작을 수행하세요.
-
         console.log("Login successful:", response.data.message);
         // Set the received token as a cookie
         Cookies.set("token", response.data.token);
