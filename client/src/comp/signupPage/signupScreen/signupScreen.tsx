@@ -84,6 +84,7 @@ function SignScreen() {
       );
 
       console.log("서버 응답:", response.data);
+      window.location.href = "/signupSucces";
       // React Router 또는 다른 적절한 방법을 사용하여 리디렉션 수행
     } catch (error: any) {
       console.error("서버로 데이터 전송 중 오류 발생:", error.message);

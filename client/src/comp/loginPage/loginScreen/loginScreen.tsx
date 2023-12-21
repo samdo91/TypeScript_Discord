@@ -5,7 +5,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useAtom } from "jotai";
 import { loginStateAtom, userDataAtom } from "../../../global/global";
-import { interUserData } from "../../../store/interface";
+import { interUserData, interChannelData } from "../../../store/interface";
 type TextProps = {
   fontSize: string;
 };
@@ -15,6 +15,7 @@ interface interLoginUserData {
   password: string;
 }
 interface LoginResponse {
+  meChannelData: [interChannelData];
   token: string;
   status: string;
   message: string;
@@ -48,6 +49,8 @@ function LoginScreen() {
         Cookies.set("token", response.data.token);
         setLoginState(true);
         const useData = response.data.userData;
+        const myChannelDataCopy = [...response.data.meChannelData];
+        const otherChannelDataCopy = [...response.data.meChannelData];
         setUserData({
           birthDate: useData.birthDate,
           email: useData.email,
@@ -56,8 +59,8 @@ function LoginScreen() {
           sendMail: useData.sendMail,
           userName: useData.userName,
           _id: useData._id,
-          myChannelData: [],
-          channelData: [],
+          myChannelData: myChannelDataCopy,
+          channelData: otherChannelDataCopy,
         });
         window.location.href = "/";
       } else {
