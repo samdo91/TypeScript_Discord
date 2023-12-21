@@ -20,6 +20,6 @@ export interface interChannelData {
 
 export interface interUserData extends interSignupData {
   _id: string;
-  myChannelData: interChannelData[];
-  channelData: interChannelData[];
+  meChannelData: interChannelData[];
+  otherChannelData: interChannelData[];
 }

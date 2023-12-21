@@ -49,8 +49,11 @@ function LoginScreen() {
         Cookies.set("token", response.data.token);
         setLoginState(true);
         const useData = response.data.userData;
-        const myChannelDataCopy = [...response.data.meChannelData];
-        const otherChannelDataCopy = [...response.data.meChannelData];
+        const meChannelDataCopy = [...response.data.userData.meChannelData];
+        const otherChannelDataCopy = [
+          ...response.data.userData.otherChannelData,
+        ];
+        console.log("마이채널", meChannelDataCopy);
         setUserData({
           birthDate: useData.birthDate,
           email: useData.email,
@@ -59,8 +62,8 @@ function LoginScreen() {
           sendMail: useData.sendMail,
           userName: useData.userName,
           _id: useData._id,
-          myChannelData: myChannelDataCopy,
-          channelData: otherChannelDataCopy,
+          meChannelData: meChannelDataCopy,
+          otherChannelData: otherChannelDataCopy,
         });
         window.location.href = "/";
       } else {

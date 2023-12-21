@@ -10,6 +10,6 @@ export const userDataAtom = atom<interUserData>({
   sendMail: false,
   userName: "",
   _id: "",
-  channelData: [{ src: "", alt: "", href: "", text: "" }],
-  myChannelData: [],
+  otherChannelData: [],
+  meChannelData: [],
 });
