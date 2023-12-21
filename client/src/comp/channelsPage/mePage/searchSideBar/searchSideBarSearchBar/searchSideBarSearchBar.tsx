@@ -1,17 +1,17 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-function FriendsSideSearchBar() {
+function SearchSideBarSearchBar() {
   return (
-    <FriendsSideSearchBars>
+    <SearchSideBarSearchBars>
       <SearchBar placeholder="대화찾기 또는 시작하기" />
-    </FriendsSideSearchBars>
+    </SearchSideBarSearchBars>
   );
 }
 
-export default FriendsSideSearchBar;
+export default SearchSideBarSearchBar;
 
-const FriendsSideSearchBars = styled.div`
+const SearchSideBarSearchBars = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

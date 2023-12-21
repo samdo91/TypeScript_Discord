@@ -25,8 +25,8 @@ interface LoginResponse {
 function LoginScreen() {
   const [currentId, setCurrentId] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
-  const [loginState, setLoginState] = useAtom(loginStateAtom);
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [, setLoginState] = useAtom(loginStateAtom);
+  const [, setUserData] = useAtom(userDataAtom);
   // response의 구조에 따라 타입 정의
 
   // handleLoginButton 함수 내에서 반환 타입 지정
