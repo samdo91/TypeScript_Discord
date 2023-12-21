@@ -39,6 +39,8 @@ function PersistentLogin() {
         // /profile 엔드포인트가 성공적으로 응답하는 경우
         console.log("User profile:", response.data);
         const useData = response.data;
+        const myChannelDataCopy = [...response.data.meChannelData];
+        const otherChannelDataCopy = [...response.data.otherChannelData];
         setUserData({
           birthDate: useData.birthDate,
           email: useData.email,
@@ -47,8 +49,8 @@ function PersistentLogin() {
           sendMail: useData.sendMail,
           userName: useData.userName,
           _id: useData._id,
-          myChannelData: [],
-          channelData: [],
+          myChannelData: myChannelDataCopy,
+          channelData: otherChannelDataCopy,
         });
         setLoginState(true);
       } catch (error: any) {
