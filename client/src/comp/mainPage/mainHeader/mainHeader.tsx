@@ -16,7 +16,9 @@ function MainHeader() {
         </Link>
         <NavModule />
         {loginState ? (
-          <NameCord>Open Discord</NameCord>
+          <Link to={"/channels"}>
+            <NameCord>Open Discord</NameCord>
+          </Link>
         ) : (
           <Link to={"/login"}>
             <NameCord>로그인</NameCord>
