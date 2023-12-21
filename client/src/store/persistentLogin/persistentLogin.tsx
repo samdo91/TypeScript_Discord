@@ -49,8 +49,8 @@ function PersistentLogin() {
           sendMail: useData.sendMail,
           userName: useData.userName,
           _id: useData._id,
-          myChannelData: myChannelDataCopy,
-          channelData: otherChannelDataCopy,
+          meChannelData: myChannelDataCopy,
+          otherChannelData: otherChannelDataCopy,
         });
         setLoginState(true);
       } catch (error: any) {
