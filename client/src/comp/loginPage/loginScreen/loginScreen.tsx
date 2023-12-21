@@ -56,6 +56,8 @@ function LoginScreen() {
           sendMail: useData.sendMail,
           userName: useData.userName,
           _id: useData._id,
+          myChannelData: [],
+          channelData: [],
         });
         window.location.href = "/";
       } else {

@@ -35,6 +35,7 @@ app.post("/signup", function (req, res) {
     password: signupData.password,
     sendMail: signupData.sendMail,
     birthDate: signupData.birthDate,
+    otherChannelData: [],
   });
 
   newUser
