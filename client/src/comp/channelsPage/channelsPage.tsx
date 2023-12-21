@@ -13,7 +13,9 @@ function ChannelsPage() {
   return (
     <div>
       <PersistentLogin />
-      <Outlet />
+      <div>
+        <Outlet />
+      </div>
     </div>
   );
 }

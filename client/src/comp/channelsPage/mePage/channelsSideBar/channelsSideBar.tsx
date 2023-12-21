@@ -5,12 +5,13 @@ import Navbar from "react-bootstrap/Navbar";
 import { userDataAtom } from "../../../../global/global";
 import styled from "@emotion/styled";
 import PersistentLogin from "../../../../store/persistentLogin/persistentLogin";
+import DiscordIcon from "../../../../store/icon/discord_Icon_Defult.jpg";
 
 // channelsData의 구조를 반영한 인터페이스 정의
 interface ChannelData {
   src: string; // 이미지 경로
   alt: string; // 이미지 대체 텍스트
-  href: string; // 링크 URL
+  href: string; // 이동할 링크 링크 URL
   text: string; // 텍스트
 }
 
@@ -19,18 +20,23 @@ function ChannelsSideBar() {
   const myChannelsData = userData.meChannelData;
   const channelsData: ChannelData[] = [
     {
-      src: "/img/logo.svg",
+      src: "/store/icon/discord_Icon_Defult.jpg",
       alt: "React Bootstrap logo",
       href: "/channels/@me",
       text: "Brand link",
     },
     {
-      src: "/img/logo.svg",
+      src: DiscordIcon,
       alt: "",
       text: "Brand text",
-      href: "#home",
+      href: DiscordIcon,
     },
-    { src: "/img/logo.svg", alt: "", text: "Brand text", href: "#home" },
+    {
+      src: "/store/icon/discord_Icon_Defult.jpg",
+      alt: "ㄹㅇㄴㅁㄹㅇㄴㅁ",
+      text: "Brand text",
+      href: DiscordIcon,
+    },
   ];
   return (
     <SideBars>
@@ -40,20 +46,28 @@ function ChannelsSideBar() {
           <React.Fragment key={"myChannelsD"}>
             <Navbar className="bg-body-tertiary">
               <Container>
-                <Navbar.Brand href={myChannelsData?.[0]?.href ?? "#"}>
-                  {myChannelsData?.length > 0 && myChannelsData[0]?.src && (
-                    <img
-                      src={myChannelsData[0].src}
-                      width="30"
-                      height="30"
-                      className="d-inline-block align-top"
-                      alt={myChannelsData[0].alt ?? ""}
-                      style={{ margin: "10px" }}
-                    />
-                  )}
-                </Navbar.Brand>
+                <IconStion>
+                  <Navbar.Brand href={myChannelsData?.[0]?.href ?? "#"}>
+                    {myChannelsData?.length > 0 && myChannelsData[0]?.src && (
+                      <img
+                        src={myChannelsData[0].src}
+                        width="60px"
+                        height="60px"
+                        className="d-inline-block align-top"
+                        alt={myChannelsData[0].alt ?? ""}
+                        style={{
+                          margin: "5px",
+                          marginTop: "20px",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    )}
+                  </Navbar.Brand>
+                </IconStion>
               </Container>
             </Navbar>
+            <UnderLine />
+
             <br />
           </React.Fragment>
         </div>
@@ -65,11 +79,12 @@ function ChannelsSideBar() {
                 <Navbar.Brand href={channel.href}>
                   {channel.src && (
                     <img
-                      src={channel.src}
-                      width="30"
-                      height="30"
+                      src="https://image.edaily.co.kr/images/Photo/files/NP/S/2021/03/PS21032600411.jpg"
+                      width="60px"
+                      height="60px"
                       className="d-inline-block align-top"
                       alt={channel.alt ?? ""}
+                      style={{ margin: "5px", borderRadius: "20px" }}
                     />
                   )}
                 </Navbar.Brand>
@@ -84,10 +99,45 @@ function ChannelsSideBar() {
 }
 
 export default ChannelsSideBar;
+const SideBarsss = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+`;
 
 const SideBars = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const UnderLine = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #c0c0c0;
+  border-radius: 16px;
+  box-shadow: 0.5px 0.5px 0 #c0c0c0;
+  width: 40px;
+  margin: 0 auto;
+`;
+
+const SideLine = styled.div`
+  display: flex;
+  border: 1px solid #c0c0c0;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0.5px 0.5px 0 #c0c0c0;
+  width: 40px;
+  height: 15px;
+  background-color: #c0c0c0;
+  transform: rotate(-90deg);
+  transform-origin: bottom left;
+`;
+
+const IconStion = styled.div`
+  display: flex;
+
   justify-content: center;
   align-items: center;
 `;

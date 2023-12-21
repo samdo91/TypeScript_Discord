@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import PersistentLogin from "../../../store/persistentLogin/persistentLogin";
 import ChannelsSideBar from "./channelsSideBar/channelsSideBar";
+import FriendsSideBar from "./friendsSideBar/friendsSideBar";
 
 const MePages = () => {
   return (
@@ -11,7 +12,9 @@ const MePages = () => {
         <div>
           <ChannelsSideBar />
         </div>
-        <div>2</div>
+        <div>
+          <FriendsSideBar />
+        </div>
         <div>3</div>
         <div>4</div>
       </Containers>
@@ -30,20 +33,21 @@ const Containers = styled.div`
 
   & > div:nth-of-type(1) {
     flex-grow: 0.1;
-    background-color: red;
+    width: 40px;
+    background-color: #191919;
   }
 
   & > div:nth-of-type(2) {
-    flex-grow: 0.7;
-    background-color: green;
+    flex-grow: 0.1;
+    background-color: #1f1f1f;
   }
 
   & > div:nth-of-type(3) {
     flex-grow: 1.5;
-    background-color: white;
+    background-color: #3e3e3e;
   }
   & > div:nth-of-type(4) {
     flex-grow: 1;
-    background-color: red;
+    background-color: #323232;
   }
 `;
