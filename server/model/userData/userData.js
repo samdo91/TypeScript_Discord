@@ -8,10 +8,10 @@ const channelDataSchema = new mongoose.Schema({
 });
 
 const defaultChannelData = {
-  src: "/img/logo.svg",
-  alt: "React Bootstrap logo",
+  src: "https://image.edaily.co.kr/images/Photo/files/NP/S/2021/03/PS21032600411.jpg",
+  alt: "@me_Channels_icon",
   href: "/channels/@me",
-  text: "Brand link",
+  text: "@me_Channels_icon",
 };
 
 const userSchema = new mongoose.Schema({
