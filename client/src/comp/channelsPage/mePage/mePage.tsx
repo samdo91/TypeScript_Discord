@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import React from "react";
+
 import PersistentLogin from "../../../store/persistentLogin/persistentLogin";
 import ChannelsSideBar from "./channelsSideBar/channelsSideBar";
-import FriendsSideBar from "./friendsSideBar/friendsSideBar";
+import SearchSideBar from "./searchSideBar/searchSideBar";
 
 const MePages = () => {
   return (
@@ -13,7 +13,7 @@ const MePages = () => {
           <ChannelsSideBar />
         </div>
         <div>
-          <FriendsSideBar />
+          <SearchSideBar />
         </div>
         <div>3</div>
         <div>4</div>

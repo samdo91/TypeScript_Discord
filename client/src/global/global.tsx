@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { interUserData } from "../store/interface";
+import { interUserData, interScreenState } from "../store/interface";
 export const loginStateAtom = atom<boolean>(false);
 
 export const userDataAtom = atom<interUserData>({
@@ -12,4 +12,8 @@ export const userDataAtom = atom<interUserData>({
   _id: "",
   otherChannelData: [],
   meChannelData: [],
+});
+
+export const screenStateAtom = atom<interScreenState>({
+  status: "@me",
 });

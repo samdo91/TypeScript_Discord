@@ -16,7 +16,7 @@ interface ChannelData {
 }
 
 function ChannelsSideBar() {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [userData] = useAtom(userDataAtom);
   const myChannelsData = userData.meChannelData;
   const channelsData: ChannelData[] = [
     {
@@ -99,11 +99,6 @@ function ChannelsSideBar() {
 }
 
 export default ChannelsSideBar;
-const SideBarsss = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-`;
 
 const SideBars = styled.div`
   display: flex;
@@ -123,17 +118,17 @@ const UnderLine = styled.div`
   margin: 0 auto;
 `;
 
-const SideLine = styled.div`
-  display: flex;
-  border: 1px solid #c0c0c0;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0.5px 0.5px 0 #c0c0c0;
-  width: 40px;
-  height: 15px;
-  background-color: #c0c0c0;
-  transform: rotate(-90deg);
-  transform-origin: bottom left;
-`;
+// const SideLine = styled.div`
+//   display: flex;
+//   border: 1px solid #c0c0c0;
+//   border-radius: 0 0 16px 16px;
+//   box-shadow: 0.5px 0.5px 0 #c0c0c0;
+//   width: 40px;
+//   height: 15px;
+//   background-color: #c0c0c0;
+//   transform: rotate(-90deg);
+//   transform-origin: bottom left;
+// `;
 
 const IconStion = styled.div`
   display: flex;
