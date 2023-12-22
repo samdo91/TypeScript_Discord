@@ -3,6 +3,7 @@ import { GrRestroomMen } from "react-icons/gr";
 import React from "react";
 import { interfriendListState } from "../../../../../store/interface";
 import FriendList from "./friendList/friendList";
+import MessageIcons from "./messageIcons/messageIcons";
 
 export interface interFriendListStateProps {
   setFriendListState: React.Dispatch<
@@ -32,8 +33,7 @@ function FriendScreenHeader({
           setFriendListState={setFriendListState}
         />
       </TitleSection>
-
-      <div>fdsafdfdsafdssafdasafdsafsdsa</div>
+      <MessageIcons />
     </FriendScreenHeaders>
   );
 }
