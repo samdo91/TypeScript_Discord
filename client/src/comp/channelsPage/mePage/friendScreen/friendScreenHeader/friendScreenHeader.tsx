@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { GrRestroomMen } from "react-icons/gr";
 import React from "react";
 import { interfriendListState } from "../../../../../store/interface";
+import FriendList from "./friendList/friendList";
 
 export interface interFriendListStateProps {
   setFriendListState: React.Dispatch<
@@ -26,7 +27,13 @@ function FriendScreenHeader({
         />
         <Title>친구</Title>
         <SideLine />
+        <FriendList
+          friendListState={friendListState}
+          setFriendListState={setFriendListState}
+        />
       </TitleSection>
+
+      <div>fdsafdfdsafdssafdasafdsafsdsa</div>
     </FriendScreenHeaders>
   );
 }
@@ -35,9 +42,10 @@ export default FriendScreenHeader;
 
 const FriendScreenHeaders = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
   height: 70px;
+  width: 100%;
 `;
 
 const TitleSection = styled.section`
@@ -49,6 +57,7 @@ const TitleSection = styled.section`
 const Title = styled.div`
   font-size: 27px;
   margin-right: 10px;
+  width: 60px;
 `;
 const SideLine = styled.div`
   display: flex;

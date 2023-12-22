@@ -84,8 +84,7 @@ const ButtonSection = styled.div<ButtonProps>`
   border-radius: 5px;
 
   background-color: ${(props) =>
-    typeof props.value === "string" &&
-    props.screenState === props.value.toLowerCase()
+    typeof props.value === "string" && props.screenState === props.value
       ? "#3e3e3e"
       : ""};
 
