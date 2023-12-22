@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import PersistentLogin from "../../../store/persistentLogin/persistentLogin";
 import ChannelsSideBar from "./channelsSideBar/channelsSideBar";
 import SearchSideBar from "./searchSideBar/searchSideBar";
+import FriendScreen from "./friendScreen/friendScreen";
 
 const MePages = () => {
   return (
@@ -15,8 +16,9 @@ const MePages = () => {
         <div>
           <SearchSideBar />
         </div>
-        <div>3</div>
-        <div>4</div>
+        <div>
+          <FriendScreen />
+        </div>
       </Containers>
     </StyledMePages>
   );

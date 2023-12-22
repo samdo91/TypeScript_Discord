@@ -3,11 +3,9 @@ import { useAtom } from "jotai";
 import React from "react";
 import { screenStateAtom } from "../../../../../global/global";
 import { interScreenState } from "../../../../../store/interface";
-
-interface screenStates {
-  screenState: string;
-}
-
+import { GrRestroomMen } from "react-icons/gr";
+import { SiFirefox } from "react-icons/si";
+import { PiStorefront } from "react-icons/pi";
 interface ButtonProps {
   screenState: interScreenState["status"];
   value: string;
@@ -20,27 +18,48 @@ function UtilityButton() {
   };
   return (
     <UtilityButtons>
-      <Button
+      <ButtonSection
         screenState={screenState.status}
         value="@me"
         onClick={() => handleButtonClick("@me")}
       >
-        친구
-      </Button>
-      <Button
+        <GrRestroomMen
+          style={{
+            margin: "10px",
+            marginRight: "20px",
+            fontSize: "40px",
+          }}
+        />
+        <Button>친구</Button>
+      </ButtonSection>
+      <ButtonSection
         screenState={screenState.status}
         value="store"
         onClick={() => handleButtonClick("store")}
       >
-        Nitro
-      </Button>
-      <Button
+        <SiFirefox
+          style={{
+            margin: "10px",
+            marginRight: "20px",
+            fontSize: "35px",
+          }}
+        />
+        <Button>Nitro</Button>
+      </ButtonSection>
+      <ButtonSection
         screenState={screenState.status}
         value="shop"
         onClick={() => handleButtonClick("shop")}
       >
-        상점
-      </Button>
+        <PiStorefront
+          style={{
+            margin: "10px",
+            marginRight: "20px",
+            fontSize: "35px",
+          }}
+        />
+        <Button>상점</Button>
+      </ButtonSection>
     </UtilityButtons>
   );
 }
@@ -54,10 +73,10 @@ const UtilityButtons = styled.div`
   flex-direction: column;
   width: 100%;
 `;
-const Button = styled.div<ButtonProps>`
+const ButtonSection = styled.div<ButtonProps>`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: 27px;
   width: 90%;
   height: 60px;
@@ -75,3 +94,4 @@ const Button = styled.div<ButtonProps>`
     background-color: #3e3e3e;
   }
 `;
+const Button = styled.div``;
