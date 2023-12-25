@@ -14,6 +14,7 @@ function FriendList({
   const handleButtonClick = (value: interfriendListState["status"]) => {
     setFriendListState({ status: value });
   };
+
   return (
     <>
       <ListButtons

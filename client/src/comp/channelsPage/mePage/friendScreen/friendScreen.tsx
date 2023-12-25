@@ -1,17 +1,37 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
 import FriendScreenHeader from "./friendScreenHeader/friendScreenHeader";
-import { interfriendListState } from "../../../../store/interface";
+import { useAtom } from "jotai";
+import { initialFriendListStateAtom } from "../../../../global/global";
+import OnlineFriendsList from "./friendList/onlineFriendsList";
+import WaitingFriendsList from "./friendList/waitingFriendsList";
+import BlockFriendsList from "./friendList/blockFriendsList";
+import AllFrienFriendsList from "./friendList/allFrienFriendsList";
 
 function FriendScreen() {
-  // 초기 상태를 "online"으로 설정
-  const initialFriendListState: interfriendListState = {
-    status: "online",
-  };
   // friendListState 리스트가 처음 켜졌을때 디폴트는   status: "online" 로 들어간다.
-  const [friendListState, setFriendListState] = useState<interfriendListState>(
-    initialFriendListState
+  const [friendListState, setFriendListState] = useAtom(
+    initialFriendListStateAtom
   );
+
+  let selectedListComponent;
+
+  switch (friendListState.status) {
+    case "online":
+      selectedListComponent = <OnlineFriendsList />;
+      break;
+    case "waiting":
+      selectedListComponent = <WaitingFriendsList />;
+      break;
+    case "allFriend":
+      selectedListComponent = <AllFrienFriendsList />;
+      break;
+    case "block":
+      selectedListComponent = <BlockFriendsList />;
+      break;
+    default:
+      selectedListComponent = "online";
+  }
   return (
     <FriendScreens>
       <FriendScreenHeader
@@ -19,7 +39,7 @@ function FriendScreen() {
         setFriendListState={setFriendListState}
       />
       <Containers>
-        <div>1</div>
+        {selectedListComponent}
         <div>2</div>
       </Containers>
     </FriendScreens>
