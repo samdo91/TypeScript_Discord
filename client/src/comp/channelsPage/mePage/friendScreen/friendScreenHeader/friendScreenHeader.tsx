@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { GrRestroomMen } from "react-icons/gr";
 import React from "react";
 import { interfriendListState } from "../../../../../store/interface";
-import FriendList from "./friendList/friendList";
+import FriendList from "./friendLists/friendLists";
 import MessageIcons from "./messageIcons/messageIcons";
 
 export interface interFriendListStateProps {

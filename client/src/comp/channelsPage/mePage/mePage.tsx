@@ -26,7 +26,12 @@ const MePages = () => {
 
 export default MePages;
 
-const StyledMePages = styled.div``;
+const StyledMePages = styled.div`
+  width: 100vw; /* 화면 전체 너비를 차지하도록 설정 */
+  height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
+  display: flex; /* Flexbox 레이아웃 사용 */
+  flex-direction: column; /* 세로 방향으로 정렬 */
+`;
 
 const Containers = styled.div`
   display: flex;
