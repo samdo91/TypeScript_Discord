@@ -45,26 +45,25 @@ function LoginScreen() {
       if (response.data.status === "success") {
         // 로그인 성공 후 필요한 동작을 수행하세요.
         console.log("Login successful:", response.data.message);
+
         // Set the received token as a cookie
         Cookies.set("token", response.data.token);
-        setLoginState(true);
-        const useData = response.data.userData;
-        const meChannelDataCopy = [...response.data.userData.meChannelData];
-        const otherChannelDataCopy = [
-          ...response.data.userData.otherChannelData,
-        ];
-        console.log("마이채널", meChannelDataCopy);
+
+        // 업데이트된 부분: isOnline을 true로 설정
         setUserData({
-          birthDate: useData.birthDate,
-          email: useData.email,
-          password: useData.password,
-          nickname: useData.nickname,
-          sendMail: useData.sendMail,
-          userName: useData.userName,
-          _id: useData._id,
-          meChannelData: meChannelDataCopy,
-          otherChannelData: otherChannelDataCopy,
+          birthDate: response.data.userData.birthDate,
+          email: response.data.userData.email,
+          password: response.data.userData.password,
+          nickname: response.data.userData.nickname,
+          sendMail: response.data.userData.sendMail,
+          userName: response.data.userData.userName,
+          isOnline: true, // 여기서 isOnline을 true로 설정
+          _id: response.data.userData._id,
+          meChannelData: [...response.data.userData.meChannelData],
+          otherChannelData: [...response.data.userData.otherChannelData],
         });
+
+        setLoginState(true);
         window.location.href = "/";
       } else {
         console.error("Login failed:", response.data.message);
@@ -79,7 +78,6 @@ function LoginScreen() {
       }
     }
   };
-
   return (
     <LoginScreens>
       <Title>

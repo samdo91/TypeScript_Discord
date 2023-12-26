@@ -48,6 +48,7 @@ function PersistentLogin() {
           nickname: useData.nickname,
           sendMail: useData.sendMail,
           userName: useData.userName,
+          isOnline: true,
           _id: useData._id,
           meChannelData: myChannelDataCopy,
           otherChannelData: otherChannelDataCopy,

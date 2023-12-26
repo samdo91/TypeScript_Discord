@@ -53,23 +53,23 @@ app.post("/signup", function (req, res) {
   });
 });
 
+// 로그인 엔드포인트
 app.post("/login", async function (req, res) {
-  // 클라이언트로부터 전송된 데이터는 req.body에 있음
   var loginData = req.body;
-
-  // 로그인에 사용되는 ID와 패스워드 추출
   const { id, password } = loginData;
-  console.log(id, password);
 
-  // 해당 ID와 패스워드로 사용자를 찾음
   try {
     const user = await User.findOne({ email: id, password: password });
 
     if (user) {
       // 사용자를 찾으면 로그인 성공
+      user.isOnline = true; // 로그인 시 isOnline을 true로 설정
+      await user.save();
+
       const token = jwt.sign({ userId: user._id }, jwtSecret, {
         expiresIn: "1h",
       });
+
       res.json({
         userData: user,
         status: "success",
@@ -93,6 +93,36 @@ app.post("/login", async function (req, res) {
   }
 });
 
+// 로그아웃 엔드포인트
+app.post("/logout", async function (req, res) {
+  const userId = req.body.userId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (user) {
+      user.isOnline = false; // 로그아웃 시 isOnline을 false로 설정
+      await user.save();
+
+      res.json({
+        status: "success",
+        message: "Logout successful.",
+      });
+    } else {
+      res.json({
+        status: "fail",
+        message: "User not found.",
+      });
+    }
+  } catch (error) {
+    console.error("Error during logout:", error);
+    res.json({
+      status: "error",
+      message: "An error occurred during logout.",
+    });
+  }
+});
+
 app.post("/profile", async (req, res) => {
   // 클라이언트로부터 쿠키에서 토큰을 추출
   const token = req.body.token;
@@ -109,7 +139,7 @@ app.post("/profile", async (req, res) => {
 
     // 토큰에서 추출한 사용자 ID로 데이터베이스에서 사용자 정보 조회
     const userData = await User.findById(decoded.userId).select("-password");
-
+    user.isOnline = true; // 로그인 시 isOnline을 true로 설정
     // 사용자 정보를 클라이언트에 응답
     res.json(userData);
   } catch (error) {

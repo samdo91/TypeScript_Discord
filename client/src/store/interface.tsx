@@ -6,6 +6,7 @@ export interface interSignupData {
   password: string;
   sendMail: boolean;
   birthDate: string;
+  isOnline: boolean;
 }
 //자동 로그인
 export interface interRequiredFieldIndicator {
