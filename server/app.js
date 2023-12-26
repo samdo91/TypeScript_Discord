@@ -70,6 +70,20 @@ app.post("/login", async function (req, res) {
         expiresIn: "1h",
       });
 
+      const friendList = await Friend.find({ userId: user._id });
+
+      user.friendList = friendList.map((friend) => {
+        return {
+          _id: friend._id,
+          email: friend.email,
+          src: friend.src,
+          alt: friend.alt,
+          href: friend.href,
+          text: friend.text,
+          isOnline: friend.isOnline,
+        };
+      });
+
       res.json({
         userData: user,
         status: "success",
@@ -139,7 +153,23 @@ app.post("/profile", async (req, res) => {
 
     // 토큰에서 추출한 사용자 ID로 데이터베이스에서 사용자 정보 조회
     const userData = await User.findById(decoded.userId).select("-password");
-    user.isOnline = true; // 로그인 시 isOnline을 true로 설정
+    userData.isOnline = true; // 로그인 시 isOnline을 true로 설정
+    await userData.save(); // 올바른 모델을 사용하여 저장
+
+    const friendList = await Friend.find({ userId: userData._id });
+
+    userData.friendList = friendList.map((friend) => {
+      return {
+        _id: friend._id,
+        email: friend.email,
+        src: friend.src,
+        alt: friend.alt,
+        href: friend.href,
+        text: friend.text,
+        isOnline: friend.isOnline,
+      };
+    });
+
     // 사용자 정보를 클라이언트에 응답
     res.json(userData);
   } catch (error) {

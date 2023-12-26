@@ -7,6 +7,11 @@ const channelDataSchema = new mongoose.Schema({
   text: { type: String, required: true },
 });
 
+const friendListSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
+  email: { type: String, required: true },
+});
+
 const defaultChannelData = {
   src: "https://image.edaily.co.kr/images/Photo/files/NP/S/2021/03/PS21032600411.jpg",
   alt: "@me_Channels_icon",
@@ -27,7 +32,7 @@ const userSchema = new mongoose.Schema({
     type: [channelDataSchema],
     default: [defaultChannelData], // 특정 객체를 디폴트 값으로 지정
   },
-  otherChannelData: [channelDataSchema],
+  friendList: [friendListSchema],
 });
 
 const User = mongoose.model("User", userSchema);
