@@ -17,6 +17,7 @@ export const userDataAtom = atom<interUserData>({
   _id: "",
   friendList: [],
   meChannelData: [],
+  detailFriendListData: [],
 });
 
 export const screenStateAtom = atom<interScreenState>({

@@ -64,6 +64,7 @@ app.post("/login", async function (req, res) {
     if (user) {
       // 사용자를 찾으면 로그인 성공
       user.isOnline = true; // 로그인 시 isOnline을 true로 설정
+
       await user.save();
 
       const token = jwt.sign({ userId: user._id }, jwtSecret, {
@@ -72,7 +73,7 @@ app.post("/login", async function (req, res) {
 
       const friendList = await Friend.find({ userId: user._id });
 
-      user.friendList = friendList.map((friend) => {
+      user.DetailFriendListData = friendList.map((friend) => {
         return {
           _id: friend._id,
           email: friend.email,
@@ -158,7 +159,7 @@ app.post("/profile", async (req, res) => {
 
     const friendList = await Friend.find({ userId: userData._id });
 
-    userData.friendList = friendList.map((friend) => {
+    userData.detailFriendListData = friendList.map((friend) => {
       return {
         _id: friend._id,
         email: friend.email,
@@ -169,7 +170,6 @@ app.post("/profile", async (req, res) => {
         isOnline: friend.isOnline,
       };
     });
-
     // 사용자 정보를 클라이언트에 응답
     res.json(userData);
   } catch (error) {
