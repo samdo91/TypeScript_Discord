@@ -15,7 +15,7 @@ export const userDataAtom = atom<interUserData>({
   userName: "",
   isOnline: false,
   _id: "",
-  otherChannelData: [],
+  friendList: [],
   meChannelData: [],
 });
 

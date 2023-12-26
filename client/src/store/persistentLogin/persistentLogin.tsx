@@ -40,7 +40,7 @@ function PersistentLogin() {
         console.log("User profile:", response.data);
         const useData = response.data;
         const myChannelDataCopy = [...response.data.meChannelData];
-        const otherChannelDataCopy = [...response.data.otherChannelData];
+        const otherChannelDataCopy = [...response.data.friendList];
         setUserData({
           birthDate: useData.birthDate,
           email: useData.email,
@@ -51,7 +51,7 @@ function PersistentLogin() {
           isOnline: true,
           _id: useData._id,
           meChannelData: myChannelDataCopy,
-          otherChannelData: otherChannelDataCopy,
+          friendList: otherChannelDataCopy,
         });
         setLoginState(true);
       } catch (error: any) {

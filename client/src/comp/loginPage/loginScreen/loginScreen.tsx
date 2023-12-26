@@ -60,7 +60,7 @@ function LoginScreen() {
           isOnline: true, // 여기서 isOnline을 true로 설정
           _id: response.data.userData._id,
           meChannelData: [...response.data.userData.meChannelData],
-          otherChannelData: [...response.data.userData.otherChannelData],
+          friendList: [...response.data.userData.friendList],
         });
 
         setLoginState(true);
