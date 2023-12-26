@@ -61,6 +61,9 @@ function LoginScreen() {
           _id: response.data.userData._id,
           meChannelData: [...response.data.userData.meChannelData],
           friendList: [...response.data.userData.friendList],
+          detailFriendListData: [
+            ...response.data.userData.detailFriendListData,
+          ],
         });
 
         setLoginState(true);

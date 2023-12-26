@@ -41,6 +41,9 @@ function PersistentLogin() {
         const useData = response.data;
         const myChannelDataCopy = [...response.data.meChannelData];
         const otherChannelDataCopy = [...response.data.friendList];
+        const detailFriendListDataCopy = [
+          ...response.data.detailFriendListData,
+        ];
         setUserData({
           birthDate: useData.birthDate,
           email: useData.email,
@@ -50,6 +53,7 @@ function PersistentLogin() {
           userName: useData.userName,
           isOnline: true,
           _id: useData._id,
+          detailFriendListData: detailFriendListDataCopy,
           meChannelData: myChannelDataCopy,
           friendList: otherChannelDataCopy,
         });

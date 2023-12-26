@@ -18,9 +18,10 @@ export interface interSignupData {
   isOnline: boolean;
 }
 // userData에 프랜드 채널에 쓸 내 친구 리스트
-export interface interFriendListData {
+export interface interFriendList {
   _id: string;
   email: string;
+  friendState: "friend" | "waiting" | "block";
 }
 
 // 회원가입 시 체널 데이터
@@ -34,12 +35,13 @@ export interface interChannelData {
 export interface interUserData extends interSignupData {
   _id: string;
   meChannelData: interChannelData[];
-  friendList: interFriendListData[];
+  detailFriendListData: interDetailFriendListData[];
+  friendList: interFriendList[];
 }
 
 //userDataAtom에 실제로 저장될 FriendListData
 
-export interface interFriendListData {
+export interface interDetailFriendListData {
   _id: string;
   email: string;
   src: string;
