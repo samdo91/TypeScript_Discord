@@ -25,6 +25,7 @@ function PersistentLogin() {
       }
 
       try {
+        console.log(token);
         // 쿠키에 저장된 토큰을 사용하여 /profile 엔드포인트로 요청 보내기
         const response = await axios.post(
           "http://localhost:3000/profile",
@@ -33,6 +34,7 @@ function PersistentLogin() {
             headers: {
               "Content-Type": "application/json",
             },
+            withCredentials: true, // 쿠키를 전송하도록 추가
           }
         );
 

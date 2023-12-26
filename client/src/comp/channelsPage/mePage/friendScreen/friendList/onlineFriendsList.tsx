@@ -7,15 +7,7 @@ import {
 import styled from "@emotion/styled";
 import { IoSearch } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
-import {
-  interDetailFriendListData,
-  interFriendList,
-  interUserData,
-} from "../../../../../store/interface";
-
-interface OnlineFriendsListProps {
-  userData: interUserData;
-}
+import { interUserData } from "../../../../../store/interface";
 
 function OnlineFriendsList() {
   const [userData, setUserData] = useAtom(userDataAtom);
@@ -114,7 +106,7 @@ const SearchBar = styled.input`
   height: 40px;
   box-shadow: 0.5px 1px 0 #3e3e3e;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 27px;
   padding-left: 40px;
 `;
 
@@ -130,4 +122,5 @@ const SearchIcon = styled.div`
 
 const Icon = styled.div`
   margin-left: auto; /* Pushes the icon to the right within the flex container */
+  font-size: 27px;
 `;

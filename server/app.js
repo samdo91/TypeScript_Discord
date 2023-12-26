@@ -8,7 +8,12 @@ const jwt = require("jsonwebtoken");
 const jwtSecret = "1q2w3e4r!";
 const cookieParser = require("cookie-parser");
 
-app.use(cors()); // 모든 origin에 대해 CORS를 허용합니다.
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3001", // 클라이언트의 주소
+  })
+); // 모든 origin에 대해 CORS를 허용합니다.
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -56,10 +61,11 @@ app.post("/signup", function (req, res) {
 // 로그인 엔드포인트
 app.post("/login", async function (req, res) {
   var loginData = req.body;
-  const { id, password } = loginData;
+  const { email, password } = loginData;
 
   try {
-    const user = await User.findOne({ email: id, password: password });
+    console.log(email, password);
+    const user = await User.findOne({ email, password });
 
     if (user) {
       // 사용자를 찾으면 로그인 성공
@@ -70,10 +76,12 @@ app.post("/login", async function (req, res) {
       const token = jwt.sign({ userId: user._id }, jwtSecret, {
         expiresIn: "1h",
       });
+      console.log(token);
+      // user.friendList에서 friendList를 가져오기
+      const friendList = user.friendList;
 
-      const friendList = await Friend.find({ userId: user._id });
-
-      user.DetailFriendListData = friendList.map((friend) => {
+      // friendList를 사용하여 detailFriendListData 생성
+      user.detailFriendListData = friendList.map((friend) => {
         return {
           _id: friend._id,
           email: friend.email,
@@ -85,6 +93,7 @@ app.post("/login", async function (req, res) {
         };
       });
 
+      console.log(user);
       res.json({
         userData: user,
         status: "success",
@@ -141,7 +150,8 @@ app.post("/logout", async function (req, res) {
 app.post("/profile", async (req, res) => {
   // 클라이언트로부터 쿠키에서 토큰을 추출
   const token = req.body.token;
-
+  console.log("!2");
+  console.log(token);
   // 토큰이 없는 경우, 401 Unauthorized 응답 반환
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -157,8 +167,9 @@ app.post("/profile", async (req, res) => {
     userData.isOnline = true; // 로그인 시 isOnline을 true로 설정
     await userData.save(); // 올바른 모델을 사용하여 저장
 
-    const friendList = await Friend.find({ userId: userData._id });
+    const friendList = userData.friendList;
 
+    // friendList를 사용하여 detailFriendListData 생성
     userData.detailFriendListData = friendList.map((friend) => {
       return {
         _id: friend._id,
@@ -170,6 +181,7 @@ app.post("/profile", async (req, res) => {
         isOnline: friend.isOnline,
       };
     });
+
     // 사용자 정보를 클라이언트에 응답
     res.json(userData);
   } catch (error) {
