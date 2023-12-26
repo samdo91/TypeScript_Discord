@@ -13,6 +13,7 @@ export const userDataAtom = atom<interUserData>({
   nickname: "",
   sendMail: false,
   userName: "",
+  isOnline: false,
   _id: "",
   otherChannelData: [],
   meChannelData: [],

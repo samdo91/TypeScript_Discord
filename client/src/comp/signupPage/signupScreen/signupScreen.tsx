@@ -74,6 +74,7 @@ function SignScreen() {
       password: password,
       sendMail: sendMail,
       birthDate: years + formatNumber(months) + formatNumber(days),
+      isOnline: false,
     };
 
     try {

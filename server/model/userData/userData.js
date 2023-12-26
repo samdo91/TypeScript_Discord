@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   sendMail: { type: Boolean, default: false },
   birthDate: { type: String, required: true },
+  isOnline: { type: Boolean, default: false },
 
   meChannelData: {
     type: [channelDataSchema],
