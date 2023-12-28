@@ -7,6 +7,7 @@ import OnlineFriendsList from "./friendList/onlineFriendsList";
 import WaitingFriendsList from "./friendList/waitingFriendsList";
 import BlockFriendsList from "./friendList/blockFriendsList";
 import AllFrienFriendsList from "./friendList/allFrienFriendsList";
+import AddFriend from "./friendList/addFriend";
 
 function FriendScreen() {
   // friendListState 리스트가 처음 켜졌을때 디폴트는   status: "online" 로 들어간다.
@@ -28,6 +29,9 @@ function FriendScreen() {
       break;
     case "block":
       selectedListComponent = <BlockFriendsList />;
+      break;
+    case "addFriend":
+      selectedListComponent = <AddFriend />;
       break;
     default:
       selectedListComponent = "online";

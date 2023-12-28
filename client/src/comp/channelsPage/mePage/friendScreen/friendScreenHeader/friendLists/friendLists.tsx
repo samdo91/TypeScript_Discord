@@ -45,7 +45,14 @@ function FriendList({
       >
         차단 목록
       </ListButtons>
-      <Button>친구 추가하기</Button>
+
+      <AddFrienButton
+        screenState={friendListState.status}
+        value="addFriend"
+        onClick={() => handleButtonClick("addFriend")}
+      >
+        친구 추가하기
+      </AddFrienButton>
     </>
   );
 }
@@ -72,17 +79,23 @@ const ListButtons = styled.div<ButtonProps>`
   }
 `;
 
-const Button = styled.div`
+const AddFrienButton = styled.div<ButtonProps>`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   font-size: 27px;
-  padding: 2px;
-  width: 90px
-  height: 60px;
-  margin: 15px;
+  padding: 0.5px;
+  width: 180px;
+  height: 40px;
+  margin: 10px;
   border-radius: 5px;
-  background-color:#18BC5D
+  color: ${(props) =>
+    typeof props.value === "string" && props.screenState === props.value
+      ? "#18bc5d"
+      : ""};
 
-  }
+  background-color: ${(props) =>
+    typeof props.value === "string" && props.screenState === props.value
+      ? ""
+      : "#18bc5d"};
 `;

@@ -11,7 +11,7 @@ type TextProps = {
 };
 
 interface interLoginUserData {
-  id: string;
+  email: string;
   password: string;
 }
 interface LoginResponse {
@@ -32,7 +32,7 @@ function LoginScreen() {
   // handleLoginButton 함수 내에서 반환 타입 지정
   const handleLoginButton = async (): Promise<void> => {
     const userData: interLoginUserData = {
-      id: currentId,
+      email: currentId,
       password: currentPassword,
     };
 

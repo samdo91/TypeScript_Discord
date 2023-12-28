@@ -60,5 +60,5 @@ export interface interScreenState {
   status: "@me" | "store" | "shop";
 }
 export interface interfriendListState {
-  status: "online" | "allFriend" | "waiting" | "block";
+  status: "online" | "allFriend" | "waiting" | "block" | "addFriend";
 }
