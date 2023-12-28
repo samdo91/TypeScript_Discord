@@ -7,7 +7,6 @@ import {
 import styled from "@emotion/styled";
 import { IoSearch } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
-import { interUserData } from "../../../../../store/interface";
 
 function OnlineFriendsList() {
   const [userData, setUserData] = useAtom(userDataAtom);

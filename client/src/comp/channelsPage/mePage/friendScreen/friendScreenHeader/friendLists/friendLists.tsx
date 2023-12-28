@@ -2,7 +2,6 @@ import React from "react";
 import { interFriendListStateProps } from "../friendScreenHeader";
 import { interfriendListState } from "../../../../../../store/interface";
 import styled from "@emotion/styled";
-import AddFriendModal from "./addFriendModal/addFriendModal";
 
 interface ButtonProps {
   screenState: interfriendListState["status"];
@@ -46,7 +45,14 @@ function FriendList({
       >
         차단 목록
       </ListButtons>
-      <AddFriendModal />
+
+      <AddFrienButton
+        screenState={friendListState.status}
+        value="addFriend"
+        onClick={() => handleButtonClick("addFriend")}
+      >
+        친구 추가하기
+      </AddFrienButton>
     </>
   );
 }
@@ -71,4 +77,25 @@ const ListButtons = styled.div<ButtonProps>`
   &:hover {
     background-color: #7e7e7e;
   }
+`;
+
+const AddFrienButton = styled.div<ButtonProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27px;
+  padding: 0.5px;
+  width: 180px;
+  height: 40px;
+  margin: 10px;
+  border-radius: 5px;
+  color: ${(props) =>
+    typeof props.value === "string" && props.screenState === props.value
+      ? "#18bc5d"
+      : ""};
+
+  background-color: ${(props) =>
+    typeof props.value === "string" && props.screenState === props.value
+      ? ""
+      : "#18bc5d"};
 `;
