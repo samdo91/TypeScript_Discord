@@ -1,23 +1,61 @@
 import { useAtom } from "jotai";
-import React from "react";
-import { initialFriendListStateAtom } from "../../../../../global/global";
+import React, { useState } from "react";
+import { userDataAtom } from "../../../../../global/global";
 import styled from "@emotion/styled";
+import axios from "axios";
 
 function AddFriend() {
-  const [friendListState, setFriendListState] = useAtom(
-    initialFriendListStateAtom
-  );
+  const [userData, setUserData] = useAtom(userDataAtom);
+  const [currentFriendEmail, setCurrentFriendEmail] = useState<string>("");
+  const [isfriendOrNot, setIsfriendOrNot] = useState<boolean>(true);
+  const handleAddFriend = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/addFriend", {
+        currentFriendEmail,
+        userId: userData._id,
+      });
 
+      // userData 업데이트
+      // setUserData(response.data.userData);
+      console.log("userData", response.data);
+
+      // Handle the response based on the status and message
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error adding friend:", error);
+      setIsfriendOrNot(false);
+    }
+  };
   return (
     <AddFriends>
       <Title>친구 추가하기</Title>
       <Tip>Discord 사용자명을 사용하여 친구를 추가 할 수 있어요.</Tip>
+
       <SearchSection>
-        <SearchBar
-          type="text"
-          placeholder="Discord 사용자명을 사용하여 친구를 추가할 수 있어요."
-        />
-        <SearchButton>친구요청보내기</SearchButton>
+        <SearchBarSection>
+          <SearchBar
+            type="text"
+            placeholder="Discord 사용자명을 사용하여 친구를 추가할 수 있어요."
+            value={currentFriendEmail}
+            onChange={(e) => {
+              setCurrentFriendEmail(e.target.value);
+            }}
+          />
+          <SearchButton
+            disabled={!currentFriendEmail}
+            currentFriendEmail={currentFriendEmail}
+            onClick={handleAddFriend}
+          >
+            친구요청보내기
+          </SearchButton>
+        </SearchBarSection>
+        {isfriendOrNot ? (
+          ""
+        ) : (
+          <div>
+            흠, 안되는군요. 사용자명을 올바르게 입력하였는지 확인하세요.
+          </div>
+        )}
       </SearchSection>
     </AddFriends>
   );
@@ -54,8 +92,16 @@ const Tip = styled.div`
 const SearchSection = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const SearchBarSection = styled.div`
+  display: flex;
+  align-items: center;
+
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
   height: 80px;
   margin: 20px;
   box-shadow: 0.5px 1px 0 #3e3e3e;
@@ -64,22 +110,20 @@ const SearchSection = styled.div`
   font-size: 25px;
   background-color: #2d2d2d;
   position: relative;
-  &:focus-within {
-    border-color: #4caf50;
-  }
 `;
-
 const SearchBar = styled.input`
   flex: 1;
   border: none;
-  outline: none;
   background-color: transparent;
-  color: white;
   font-size: inherit;
+  height: 100%;
+  padding: 0;
+  outline: none;
 `;
 
-const SearchButton = styled.button`
-  background-color: #4caf50;
+const SearchButton = styled.button<{ currentFriendEmail: string }>`
+  background-color: ${(props) =>
+    props.currentFriendEmail ? "#18bc5d" : "#2A8229"};
   color: white;
   border: none;
   padding: 10px 15px;
@@ -87,4 +131,5 @@ const SearchButton = styled.button`
   cursor: pointer;
   margin-right: 10px;
   font-size: 25px;
+  filter: ${(props) => (props.currentFriendEmail ? "none" : "brightness(80%)")};
 `;

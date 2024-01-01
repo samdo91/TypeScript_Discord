@@ -165,7 +165,6 @@ app.post("/profile", async (req, res) => {
     // 토큰에서 추출한 사용자 ID로 데이터베이스에서 사용자 정보 조회
     const userData = await User.findById(decoded.userId).select("-password");
     userData.isOnline = true; // 로그인 시 isOnline을 true로 설정
-    await userData.save(); // 올바른 모델을 사용하여 저장
 
     const friendList = userData.friendList;
 
@@ -181,7 +180,7 @@ app.post("/profile", async (req, res) => {
         isOnline: friend.isOnline,
       };
     });
-
+    await userData.save(); // 올바른 모델을 사용하여 저장
     // 사용자 정보를 클라이언트에 응답
     res.json(userData);
   } catch (error) {
@@ -196,7 +195,53 @@ app.post("/profile", async (req, res) => {
     }
   }
 });
+app.post("/addFriend", async (req, res) => {
+  const { currentFriendEmail, userId } = req.body;
 
+  try {
+    // 단계 a: userId로 사용자를 찾습니다 (meUserData)
+    const meUserData = await User.findById(userId);
+    if (!meUserData) {
+      return res.status(404).json({
+        status: "fail",
+        message:
+          "사용자를 찾을 수 없습니다. 사용자가 로그인되어 있는지 확인하세요.",
+      });
+    }
+
+    // 단계 b: currentFriendEmail로 친구 사용자를 찾습니다 (friendUserData)
+    const friendUserData = await User.findOne({ email: currentFriendEmail });
+    if (!friendUserData) {
+      return res.status(404).json({
+        status: "fail",
+        message: "친구를 찾을 수 없습니다. 사용자명이 올바른지 확인하세요.",
+      });
+    }
+
+    // 단계 c: meUserData에서 친구 목록을 업데이트합니다
+    const friendListEntry = {
+      _id: friendUserData._id,
+      email: friendUserData.email,
+      friendState: "waiting", // 필요에 따라 이 부분을 조정할 수 있습니다.
+    };
+
+    meUserData.friendList.push(friendListEntry);
+    await meUserData.save();
+
+    // 단계 d: 업데이트된 meUserData로 응답합니다
+    res.json({
+      userData: meUserData,
+      status: "success",
+      message: "친구가 성공적으로 추가되었습니다.",
+    });
+  } catch (error) {
+    console.error("친구 추가 중 오류 발생:", error);
+    res.status(500).json({
+      status: "error",
+      message: "프로세스 중 오류가 발생했습니다.",
+    });
+  }
+});
 // 3000 포트로 서버 오픈
 app.listen(3000, function () {
   console.log("Express server is listening on port 3000");
