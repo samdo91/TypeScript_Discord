@@ -19,7 +19,7 @@ const defaultChannelData = {
   href: "/channels/@me",
   text: "@me_Channels_icon",
 };
-const detailFriendListDatSchema = new mongoose.Schema({
+const detailFriendListDataSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   email: { type: String, required: true },
   src: { type: String, required: true },
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
     default: [defaultChannelData], // 특정 객체를 디폴트 값으로 지정
   },
   friendList: [friendListSchema],
-  detailFriendListData: [detailFriendListDatSchema],
+  detailFriendListData: [detailFriendListDataSchema],
 });
 
 const User = mongoose.model("User", userSchema);
