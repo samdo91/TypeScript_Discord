@@ -16,7 +16,7 @@ function OnlineFriendsList() {
   );
   const [currentSearch, setCurrentSearch] = useState<string>("");
   const [friendList, setFriendList] = useState<string[]>([]);
-
+  const detailFriendListData = userData.detailFriendListData;
   useEffect(() => {
     let filteredFriends: string[] = [];
 

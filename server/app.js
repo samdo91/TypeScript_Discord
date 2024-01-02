@@ -98,8 +98,11 @@ app.post("/login", async function (req, res) {
               alt: meChannelData ? meChannelData.alt : "",
               href: meChannelData ? meChannelData.href : "",
               text: meChannelData ? meChannelData.text : "",
-              isOnline: friend.isOnline || false,
-              friendState: friend.friendState || "",
+              isOnline: friend.isOnline,
+              friendState:
+                typeof friend.friendState === "string"
+                  ? friend.friendState
+                  : String(friend.friendState),
             };
 
             detailFriendListData.push(friendData);
@@ -195,14 +198,17 @@ app.post("/profile", async (req, res) => {
           friendUserData.meChannelData[0];
 
         const friendData = {
-          _id: friendUserData._id,
-          email: friendUserData.email,
-          src: meChannelData ? meChannelData.src : "default_src_value",
-          alt: meChannelData ? meChannelData.alt : "default_alt_value",
-          href: meChannelData ? meChannelData.href : "default_href_value",
-          text: meChannelData ? meChannelData.text : "default_text_value",
-          isOnline: friend.isOnline || false,
-          friendState: friend.friendState || "",
+          _id: friend._id,
+          email: friend.email,
+          src: meChannelData ? meChannelData.src : "",
+          alt: meChannelData ? meChannelData.alt : "",
+          href: meChannelData ? meChannelData.href : "",
+          text: meChannelData ? meChannelData.text : "",
+          isOnline: friend.isOnline,
+          friendState:
+            typeof friend.friendState === "string"
+              ? friend.friendState
+              : String(friend.friendState),
         };
 
         // userData.detailFriendListData에 추가
@@ -316,14 +322,17 @@ app.post("/addFriend", async (req, res) => {
           friendUserData.meChannelData[0];
 
         const friendData = {
-          _id: friendUserData._id,
-          email: friendUserData.email,
-          src: meChannelData ? meChannelData.src : "default_src_value",
-          alt: meChannelData ? meChannelData.alt : "default_alt_value",
-          href: meChannelData ? meChannelData.href : "default_href_value",
-          text: meChannelData ? meChannelData.text : "default_text_value",
-          isOnline: friend.isOnline || false,
-          friendState: friend.friendState || "",
+          _id: friend._id,
+          email: friend.email,
+          src: meChannelData ? meChannelData.src : "",
+          alt: meChannelData ? meChannelData.alt : "",
+          href: meChannelData ? meChannelData.href : "",
+          text: meChannelData ? meChannelData.text : "",
+          isOnline: friend.isOnline,
+          friendState:
+            typeof friend.friendState === "string"
+              ? friend.friendState
+              : String(friend.friendState),
         };
 
         // userData.detailFriendListData에 추가

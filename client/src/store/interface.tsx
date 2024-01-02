@@ -49,6 +49,7 @@ export interface interDetailFriendListData {
   href: string;
   text: string;
   isOnline: boolean;
+  friendState: "friend" | "waiting" | "block";
 }
 
 //자동 로그인
