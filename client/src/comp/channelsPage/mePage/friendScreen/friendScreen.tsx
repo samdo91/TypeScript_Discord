@@ -4,9 +4,6 @@ import FriendScreenHeader from "./friendScreenHeader/friendScreenHeader";
 import { useAtom } from "jotai";
 import { initialFriendListStateAtom } from "../../../../global/global";
 import OnlineFriendsList from "./friendList/onlineFriendsList";
-import WaitingFriendsList from "./friendList/waitingFriendsList";
-import BlockFriendsList from "./friendList/blockFriendsList";
-import AllFrienFriendsList from "./friendList/allFrienFriendsList";
 import AddFriend from "./friendList/addFriend";
 
 function FriendScreen() {
@@ -18,23 +15,11 @@ function FriendScreen() {
   let selectedListComponent;
 
   switch (friendListState.status) {
-    case "online":
-      selectedListComponent = <OnlineFriendsList />;
-      break;
-    case "waiting":
-      selectedListComponent = <WaitingFriendsList />;
-      break;
-    case "allFriend":
-      selectedListComponent = <AllFrienFriendsList />;
-      break;
-    case "block":
-      selectedListComponent = <BlockFriendsList />;
-      break;
     case "addFriend":
       selectedListComponent = <AddFriend />;
       break;
     default:
-      selectedListComponent = "online";
+      selectedListComponent = <OnlineFriendsList />;
   }
   return (
     <FriendScreens>
