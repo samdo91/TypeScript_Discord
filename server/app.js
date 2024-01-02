@@ -68,9 +68,7 @@ app.post("/login", async function (req, res) {
     const user = await User.findOne({ email, password });
 
     if (user) {
-      // 사용자를 찾으면 로그인 성공
-      user.isOnline = true; // 로그인 시 isOnline을 true로 설정
-
+      user.isOnline = true; // 로그인 성공 시 isOnline을 true로 설정
       await user.save();
 
       const token = jwt.sign({ userId: user._id }, jwtSecret, {
@@ -78,45 +76,56 @@ app.post("/login", async function (req, res) {
       });
       console.log(token);
 
-      // user.friendList에서 friendList를 가져오기
       const friendList = user.friendList;
+      const detailFriendListData = []; // detailFriendListData를 완전히 빈 배열로 초기화
 
-      // friendList를 사용하여 detailFriendListData 생성
-      friendList.forEach((friend) => {
-        const meChannelData = friend.meChannelData[0];
-        const friendData = {
-          _id: friend._id,
-          email: friend.email,
-          src: meChannelData ? meChannelData.src : "", // 또는 다른 기본값 설정
-          alt: meChannelData ? meChannelData.alt : "",
-          href: meChannelData ? meChannelData.href : "",
-          text: meChannelData ? meChannelData.text : "",
-          isOnline: friend.isOnline || false,
-          friendState: friend.friendState || "", // friendState가 존재하면 설정, 그렇지 않으면 빈 문자열
-        };
+      // 사용자에게 friendList가 있는지 확인
+      if (friendList && friendList.length > 0) {
+        // friendList를 반복
+        friendList.forEach((friend) => {
+          // 유효한 friend인지 확인
+          if (friend && friend._id) {
+            // friend에 meChannelData 배열이 있고 길이가 0보다 큰지 확인
+            const meChannelData =
+              friend.meChannelData && friend.meChannelData.length > 0
+                ? friend.meChannelData[0]
+                : null;
 
-        user.detailFriendListData.push(friendData);
-      });
+            const friendData = {
+              _id: friend._id,
+              email: friend.email,
+              src: meChannelData ? meChannelData.src : "",
+              alt: meChannelData ? meChannelData.alt : "",
+              href: meChannelData ? meChannelData.href : "",
+              text: meChannelData ? meChannelData.text : "",
+              isOnline: friend.isOnline || false,
+              friendState: friend.friendState || "",
+            };
+
+            detailFriendListData.push(friendData);
+          }
+        });
+      }
+
+      user.detailFriendListData = detailFriendListData;
 
       res.json({
         userData: user,
         status: "success",
-        message: "Login successful.",
+        message: "로그인 성공.",
         token: token,
       });
     } else {
-      // 사용자를 찾지 못하면 로그인 실패
       res.json({
         status: "fail",
-        message: "Login failed. User not found or incorrect password.",
+        message: "로그인 실패. 사용자를 찾을 수 없거나 잘못된 비밀번호입니다.",
       });
     }
   } catch (error) {
-    // 에러 발생 시 처리
-    console.error("Error during login:", error);
+    console.error("로그인 중 오류 발생:", error);
     res.json({
       status: "error",
-      message: "An error occurred during login.",
+      message: "로그인 중 오류가 발생했습니다.",
     });
   }
 });
@@ -213,11 +222,8 @@ app.post("/profile", async (req, res) => {
 
     // 업데이트된 isOnline 필드로 문서 저장
 
-    // 최종적으로 userData.detailFriendListData에 할당
-    // userData.detailFriendListData = validUserDataArray;
-
     // 사용자 정보를 클라이언트에 응답
-    console.log("userData~~~~~~~~~~", userData);
+
     res.json(userData);
   } catch (error) {
     console.error("토큰 검증 오류:", error);
@@ -262,10 +268,11 @@ app.post("/addFriend", async (req, res) => {
     );
 
     if (isAlreadyFriendForMe) {
-      res.json({
+      // 이미 친구인 경우, 응답으로 현재 사용자 데이터 전송
+      return res.json({
         userData: meUserData,
         status: "success",
-        message: "친구가 성공적으로 추가되었습니다.",
+        message: "친구가 이미 추가되었습니다.",
       });
     }
 
@@ -295,6 +302,52 @@ app.post("/addFriend", async (req, res) => {
     }
 
     // 단계 e: 업데이트된 meUserData로 응답합니다
+    const userDataPromises = meUserData.friendList.map(async (friend) => {
+      try {
+        // friend의 id를 사용하여 데이터베이스에서 해당 유저 데이터를 가져옴
+        const friendUserData = await User.findById(friend._id).select(
+          "-password"
+        );
+
+        // friendUserData가 존재하고 meChannelData가 존재하며 비어 있지 않은 경우에만 첫 번째 요소를 가져옴
+        const meChannelData =
+          friendUserData &&
+          friendUserData.meChannelData &&
+          friendUserData.meChannelData[0];
+
+        const friendData = {
+          _id: friendUserData._id,
+          email: friendUserData.email,
+          src: meChannelData ? meChannelData.src : "default_src_value",
+          alt: meChannelData ? meChannelData.alt : "default_alt_value",
+          href: meChannelData ? meChannelData.href : "default_href_value",
+          text: meChannelData ? meChannelData.text : "default_text_value",
+          isOnline: friend.isOnline || false,
+          friendState: friend.friendState || "",
+        };
+
+        // userData.detailFriendListData에 추가
+        meUserData.detailFriendListData.push(friendData);
+
+        return friendData;
+      } catch (error) {
+        console.error("Error fetching friendUserData:", error);
+        return null;
+      }
+    });
+
+    const userDataArray = await Promise.all(userDataPromises);
+    const validUserDataArray = userDataArray.filter(
+      (userData) => userData !== null
+    );
+
+    // 업데이트된 isOnline 필드로 문서 저장
+    await meUserData.save();
+
+    // 최종적으로 userData.detailFriendListData에 할당
+    // userData.detailFriendListData = validUserDataArray;
+
+    // 사용자 정보를 클라이언트에 응답
     res.json({
       userData: meUserData,
       status: "success",
