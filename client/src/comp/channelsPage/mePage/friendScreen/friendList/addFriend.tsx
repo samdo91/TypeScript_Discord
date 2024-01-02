@@ -16,8 +16,7 @@ function AddFriend() {
       });
 
       // userData 업데이트
-      // setUserData(response.data.userData);
-      console.log("userData", response.data);
+      setUserData(response.data.userData);
 
       // Handle the response based on the status and message
       console.log(response.data);
@@ -26,6 +25,7 @@ function AddFriend() {
       console.error("Error adding friend:", error);
       setIsfriendOrNot(false);
     }
+    console.log("userData", userData);
   };
   return (
     <AddFriends>

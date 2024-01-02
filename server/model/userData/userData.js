@@ -20,7 +20,7 @@ const defaultChannelData = {
   text: "@me_Channels_icon",
 };
 const detailFriendListDataSchema = new mongoose.Schema({
-  _id: { type: String, required: true },
+  _id: { type: String },
   email: { type: String, required: true },
   src: { type: String, required: true },
   alt: { type: String, required: true },
