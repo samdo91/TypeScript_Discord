@@ -27,6 +27,7 @@ const detailFriendListDataSchema = new mongoose.Schema({
   href: { type: String, required: true },
   text: { type: String, required: true },
   isOnline: { type: Boolean, required: true },
+  friendState: { type: String, required: true },
 });
 
 const userSchema = new mongoose.Schema({
