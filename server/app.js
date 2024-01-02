@@ -77,23 +77,27 @@ app.post("/login", async function (req, res) {
         expiresIn: "1h",
       });
       console.log(token);
+
       // user.friendList에서 friendList를 가져오기
       const friendList = user.friendList;
 
       // friendList를 사용하여 detailFriendListData 생성
-      user.detailFriendListData = friendList.map((friend) => {
-        return {
+      friendList.forEach((friend) => {
+        const meChannelData = friend.meChannelData[0];
+        const friendData = {
           _id: friend._id,
           email: friend.email,
-          src: friend.src,
-          alt: friend.alt,
-          href: friend.href,
-          text: friend.text,
-          isOnline: friend.isOnline,
+          src: meChannelData ? meChannelData.src : "", // 또는 다른 기본값 설정
+          alt: meChannelData ? meChannelData.alt : "",
+          href: meChannelData ? meChannelData.href : "",
+          text: meChannelData ? meChannelData.text : "",
+          isOnline: friend.isOnline || false,
+          friendState: friend.friendState || "", // friendState가 존재하면 설정, 그렇지 않으면 빈 문자열
         };
+
+        user.detailFriendListData.push(friendData);
       });
 
-      console.log(user);
       res.json({
         userData: user,
         status: "success",
@@ -146,11 +150,10 @@ app.post("/logout", async function (req, res) {
     });
   }
 });
-
 app.post("/profile", async (req, res) => {
   // 클라이언트로부터 쿠키에서 토큰을 추출
   const token = req.body.token;
-  console.log("!2");
+
   console.log(token);
   // 토큰이 없는 경우, 401 Unauthorized 응답 반환
   if (!token) {
@@ -169,32 +172,67 @@ app.post("/profile", async (req, res) => {
     const friendList = userData.friendList;
 
     // friendList를 사용하여 detailFriendListData 생성
-    userData.detailFriendListData = friendList.map((friend) => {
-      return {
-        _id: friend._id,
-        email: friend.email,
-        src: friend.src,
-        alt: friend.alt,
-        href: friend.href,
-        text: friend.text,
-        isOnline: friend.isOnline,
-      };
+    const userDataPromises = friendList.map(async (friend) => {
+      try {
+        // friend의 id를 사용하여 데이터베이스에서 해당 유저 데이터를 가져옴
+        const friendUserData = await User.findById(friend._id).select(
+          "-password"
+        );
+
+        // friendUserData가 존재하고 meChannelData가 존재하며 비어 있지 않은 경우에만 첫 번째 요소를 가져옴
+        const meChannelData =
+          friendUserData &&
+          friendUserData.meChannelData &&
+          friendUserData.meChannelData[0];
+
+        const friendData = {
+          _id: friendUserData._id,
+          email: friendUserData.email,
+          src: meChannelData ? meChannelData.src : "default_src_value",
+          alt: meChannelData ? meChannelData.alt : "default_alt_value",
+          href: meChannelData ? meChannelData.href : "default_href_value",
+          text: meChannelData ? meChannelData.text : "default_text_value",
+          isOnline: friend.isOnline || false,
+          friendState: friend.friendState || "",
+        };
+
+        // userData.detailFriendListData에 추가
+        userData.detailFriendListData.push(friendData);
+
+        return friendData;
+      } catch (error) {
+        console.error("Error fetching friendUserData:", error);
+        return null;
+      }
     });
-    await userData.save(); // 올바른 모델을 사용하여 저장
+
+    const userDataArray = await Promise.all(userDataPromises);
+    const validUserDataArray = userDataArray.filter(
+      (userData) => userData !== null
+    );
+
+    // 업데이트된 isOnline 필드로 문서 저장
+
+    // 최종적으로 userData.detailFriendListData에 할당
+    // userData.detailFriendListData = validUserDataArray;
+
     // 사용자 정보를 클라이언트에 응답
+    console.log("userData~~~~~~~~~~", userData);
     res.json(userData);
   } catch (error) {
-    console.error("Error verifying token:", error);
+    console.error("토큰 검증 오류:", error);
 
     // 토큰 만료 에러인 경우, 401 Unauthorized 응답 반환
     if (error.name === "TokenExpiredError") {
-      res.status(401).json({ error: "Token expired. Please log in again." });
+      res.status(401).json({ error: "토큰 만료. 다시 로그인하세요." });
     } else {
       // 그 외의 경우, 401 Unauthorized 응답 반환
       res.status(401).json({ error: "Unauthorized" });
     }
   }
 });
+
+// 친구 추가 엔드포인트
 app.post("/addFriend", async (req, res) => {
   const { currentFriendEmail, userId } = req.body;
 
@@ -218,17 +256,45 @@ app.post("/addFriend", async (req, res) => {
       });
     }
 
-    // 단계 c: meUserData에서 친구 목록을 업데이트합니다
-    const friendListEntry = {
+    // 단계 c: 이미 친구인지 확인합니다
+    const isAlreadyFriendForMe = meUserData.friendList.some(
+      (friend) => friend._id.toString() === friendUserData._id.toString()
+    );
+
+    if (isAlreadyFriendForMe) {
+      res.json({
+        userData: meUserData,
+        status: "success",
+        message: "친구가 성공적으로 추가되었습니다.",
+      });
+    }
+
+    // 친구 목록에 추가
+    const friendListEntryForMe = {
       _id: friendUserData._id,
       email: friendUserData.email,
       friendState: "waiting", // 필요에 따라 이 부분을 조정할 수 있습니다.
     };
-
-    meUserData.friendList.push(friendListEntry);
+    meUserData.friendList.push(friendListEntryForMe);
     await meUserData.save();
 
-    // 단계 d: 업데이트된 meUserData로 응답합니다
+    // 단계 d: friendUserData에서 나를 친구로 추가합니다
+    const isAlreadyFriendForFriend = friendUserData.friendList.some(
+      (friend) => friend._id.toString() === meUserData._id.toString()
+    );
+
+    if (!isAlreadyFriendForFriend) {
+      // 친구 목록에 추가
+      const friendListEntryForFriend = {
+        _id: meUserData._id,
+        email: meUserData.email,
+        friendState: "waiting", // 필요에 따라 이 부분을 조정할 수 있습니다.
+      };
+      friendUserData.friendList.push(friendListEntryForFriend);
+      await friendUserData.save();
+    }
+
+    // 단계 e: 업데이트된 meUserData로 응답합니다
     res.json({
       userData: meUserData,
       status: "success",
@@ -242,6 +308,7 @@ app.post("/addFriend", async (req, res) => {
     });
   }
 });
+
 // 3000 포트로 서버 오픈
 app.listen(3000, function () {
   console.log("Express server is listening on port 3000");

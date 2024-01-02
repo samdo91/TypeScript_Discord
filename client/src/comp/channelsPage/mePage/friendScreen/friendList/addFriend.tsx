@@ -7,7 +7,7 @@ import axios from "axios";
 function AddFriend() {
   const [userData, setUserData] = useAtom(userDataAtom);
   const [currentFriendEmail, setCurrentFriendEmail] = useState<string>("");
-  const [isfriendOrNot, setIsfriendOrNot] = useState<boolean>(true);
+  const [isfriendOrNot, setIsfriendOrNot] = useState<boolean | null>(null); // null로 초기화
   const handleAddFriend = async () => {
     try {
       const response = await axios.post("http://localhost:3000/addFriend", {
@@ -21,6 +21,7 @@ function AddFriend() {
 
       // Handle the response based on the status and message
       console.log(response.data);
+      setIsfriendOrNot(true);
     } catch (error) {
       console.error("Error adding friend:", error);
       setIsfriendOrNot(false);
@@ -49,11 +50,11 @@ function AddFriend() {
             친구요청보내기
           </SearchButton>
         </SearchBarSection>
-        {isfriendOrNot ? (
-          ""
-        ) : (
+        {isfriendOrNot !== null && (
           <div>
-            흠, 안되는군요. 사용자명을 올바르게 입력하였는지 확인하세요.
+            {isfriendOrNot
+              ? `${currentFriendEmail}에게 성공적으로 친구요청을 보냈어요.`
+              : "흠, 안되는군요. 사용자명을 올바르게 입력하였는지 확인하세요."}
           </div>
         )}
       </SearchSection>
