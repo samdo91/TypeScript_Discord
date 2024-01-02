@@ -7,6 +7,8 @@ import {
 import styled from "@emotion/styled";
 import { IoSearch } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
+import FriendListBoard from "./friendListBoard/friendListBoard";
+import { interDetailFriendListData } from "../../../../../store/interface";
 
 function OnlineFriendsList() {
   const [userData, setUserData] = useAtom(userDataAtom);
@@ -15,39 +17,36 @@ function OnlineFriendsList() {
     initialFriendListStateAtom
   );
   const [currentSearch, setCurrentSearch] = useState<string>("");
-  const [friendList, setFriendList] = useState<string[]>([]);
-  const detailFriendListData = userData.detailFriendListData;
+  const [friendList, setFriendList] = useState<interDetailFriendListData[]>([]);
+
   useEffect(() => {
-    let filteredFriends: string[] = [];
+    let filteredFriends: interDetailFriendListData[] = [];
 
     if (friendListState.status === "online") {
-      // "online" 상태이면서 friendState가 "friend"인 모든 친구를 필터링
-      filteredFriends = userData.friendList
-        .filter((friend) => friend.friendState === "friend")
-        .map((friend) => friend._id);
+      filteredFriends = userData.detailFriendListData.filter(
+        (friend) => friend.friendState === "friend"
+      );
     } else {
-      // 온라인 상태가 아닐 때, friendListState.status에 따라 다르게 필터링
       const friendStateFilter =
         friendListState.status === "allFriend"
           ? "friend"
           : friendListState.status;
 
-      filteredFriends = userData.friendList
-        .filter((friend) => friend.friendState === friendStateFilter)
-        .map((friend) => friend._id);
-    }
-
-    // 현재 검색어가 있는 경우, 검색어로 다시 필터링
-    if (currentSearch) {
-      filteredFriends = filteredFriends.filter((friendId) =>
-        friendId.includes(currentSearch)
+      filteredFriends = userData.detailFriendListData.filter(
+        (friend) => friend.friendState === friendStateFilter
       );
     }
 
-    // 최종적으로 filteredFriends를 friendList 상태로 업데이트
+    if (currentSearch) {
+      filteredFriends = filteredFriends.filter((friend) =>
+        friend._id.includes(currentSearch)
+      );
+    }
+
     setFriendList(filteredFriends);
 
-    return () => {};
+    // 여기에서 friendList의 최신 상태를 올바르게 기록합니다.
+    console.log("FriendListFriendList", filteredFriends);
   }, [friendListState, userData, currentSearch]);
 
   return (
@@ -74,12 +73,12 @@ function OnlineFriendsList() {
           </Icon>
         </SearchIcon>
       </SearchBarWrapper>
-      {/* friendList를 사용하여 원하는 방식으로 화면에 표시 */}
-      {friendList.map((friendId) => (
-        // 여기에서 friendId를 이용하여 원하는 방식으로 친구를 화면에 표시할 수 있습니다.
-        // 예: <FriendComponent key={friendId} friendId={friendId} />
-        <div key={friendId}>{friendId}</div>
-      ))}
+      <div>
+        <FriendListBoard
+          friendList={friendList}
+          setFriendList={setFriendList}
+        />
+      </div>
     </OnlineFriendsLists>
   );
 }
@@ -88,19 +87,27 @@ export default OnlineFriendsList;
 
 const OnlineFriendsLists = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+
+  flex-direction: column;
   border-bottom: 1px solid #3e3e3e;
   box-shadow: 1px 0.5px 0 #3e3e3e;
-  height: 100px;
+  height: 100%;
 `;
 
 const SearchBarWrapper = styled.div`
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
   position: relative;
   width: 90%;
+  margin: 40px auto;
 `;
 
 const SearchBar = styled.input`
+  display: flex;
+
+  align-items: center;
   width: 100%;
   height: 40px;
   box-shadow: 0.5px 1px 0 #3e3e3e;
@@ -110,6 +117,9 @@ const SearchBar = styled.input`
 `;
 
 const SearchIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   display: flex;
   align-items: center;
   position: absolute;

@@ -67,6 +67,7 @@ export default AddFriend;
 const AddFriends = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 `;
 
 const Title = styled.div`
