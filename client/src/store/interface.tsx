@@ -22,6 +22,7 @@ export interface interFriendList {
   _id: string;
   email: string;
   friendState: "friend" | "waiting" | "block";
+  friendRequestType: "Outgoing" | "Incoming";
 }
 
 // 회원가입 시 체널 데이터
@@ -50,6 +51,8 @@ export interface interDetailFriendListData {
   text: string;
   isOnline: boolean;
   friendState: "friend" | "waiting" | "block";
+  friendRequestType: "Outgoing" | "Incoming";
+  nickname: string;
 }
 
 //자동 로그인

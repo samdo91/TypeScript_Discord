@@ -26,7 +26,7 @@ function FriendListBoard({ friendList, setFriendList }: interFriendListSProps) {
         <WaitingBoard>
           {friendList.map((friend) => {
             return (
-              <WaitingItem>
+              <WaitingItem key={friend._id}>
                 <img
                   src={friend.src}
                   width="50px"
@@ -38,6 +38,14 @@ function FriendListBoard({ friendList, setFriendList }: interFriendListSProps) {
                     borderRadius: "30px",
                   }}
                 ></img>
+                <WaitingName>
+                  <div>{friend.nickname}</div>
+                  <div>
+                    {friend.friendRequestType === "Outgoing"
+                      ? "보낸 친구 요청"
+                      : "받은 친구 요청"}
+                  </div>
+                </WaitingName>
               </WaitingItem>
             );
           })}
@@ -88,4 +96,10 @@ const WaitingItem = styled.div`
     background-color: rgba(126, 126, 126, 0.25);
   }
   border-radius: 10px;
+`;
+const WaitingName = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 `;

@@ -98,6 +98,8 @@ app.post("/login", async function (req, res) {
               alt: meChannelData ? meChannelData.alt : "",
               href: meChannelData ? meChannelData.href : "",
               text: meChannelData ? meChannelData.text : "",
+              friendRequestType: friend.friendRequestType,
+              nickname: friend.nickname,
               isOnline: friend.isOnline,
               friendState:
                 typeof friend.friendState === "string"
@@ -200,11 +202,13 @@ app.post("/profile", async (req, res) => {
         const friendData = {
           _id: friend._id,
           email: friend.email,
+          nickname: friendUserData.nickname,
+          isOnline: friendUserData.isOnline,
+          friendRequestType: friend.friendRequestType,
           src: meChannelData ? meChannelData.src : "",
           alt: meChannelData ? meChannelData.alt : "",
           href: meChannelData ? meChannelData.href : "",
           text: meChannelData ? meChannelData.text : "",
-          isOnline: friend.isOnline,
           friendState:
             typeof friend.friendState === "string"
               ? friend.friendState
@@ -286,7 +290,8 @@ app.post("/addFriend", async (req, res) => {
     const friendListEntryForMe = {
       _id: friendUserData._id,
       email: friendUserData.email,
-      friendState: "waiting", // 필요에 따라 이 부분을 조정할 수 있습니다.
+      friendState: "waiting",
+      friendRequestType: "Outgoing",
     };
     meUserData.friendList.push(friendListEntryForMe);
     await meUserData.save();
@@ -301,7 +306,8 @@ app.post("/addFriend", async (req, res) => {
       const friendListEntryForFriend = {
         _id: meUserData._id,
         email: meUserData.email,
-        friendState: "waiting", // 필요에 따라 이 부분을 조정할 수 있습니다.
+        friendState: "waiting",
+        friendRequestType: "Incoming",
       };
       friendUserData.friendList.push(friendListEntryForFriend);
       await friendUserData.save();
@@ -328,7 +334,9 @@ app.post("/addFriend", async (req, res) => {
           alt: meChannelData ? meChannelData.alt : "",
           href: meChannelData ? meChannelData.href : "",
           text: meChannelData ? meChannelData.text : "",
-          isOnline: friend.isOnline,
+          isOnline: friendUserData.isOnline,
+          friendRequestType: friend.friendRequestType,
+          nickname: friendUserData.nickname,
           friendState:
             typeof friend.friendState === "string"
               ? friend.friendState

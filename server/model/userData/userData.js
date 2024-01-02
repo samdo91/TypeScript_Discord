@@ -11,6 +11,7 @@ const friendListSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   email: { type: String, required: true },
   friendState: { type: String, required: true },
+  friendRequestType: { type: String, required: true },
 });
 
 const defaultChannelData = {
@@ -28,6 +29,8 @@ const detailFriendListDataSchema = new mongoose.Schema({
   text: { type: String, required: true },
   isOnline: { type: Boolean, required: true },
   friendState: { type: String, required: true },
+  friendRequestType: { type: String, required: true },
+  nickname: { type: String, required: true },
 });
 
 const userSchema = new mongoose.Schema({
