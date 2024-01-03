@@ -2,6 +2,11 @@ import styled from "@emotion/styled";
 import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FiX } from "react-icons/fi";
+import { interDetailFriendListData } from "../../../../../../../store/interface";
+
+interface ButtonProps {
+  friend: interDetailFriendListData;
+}
 
 const CancelIconHint = (
   <Tooltip
@@ -20,7 +25,7 @@ const CancelIconHint = (
     취소
   </Tooltip>
 );
-function CancelButton() {
+function CancelButton({ friend }: ButtonProps) {
   return (
     <CancelButtons>
       <OverlayTrigger placement="top" overlay={CancelIconHint}>

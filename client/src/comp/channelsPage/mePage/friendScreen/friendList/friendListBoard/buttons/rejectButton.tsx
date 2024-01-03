@@ -2,6 +2,11 @@ import styled from "@emotion/styled";
 import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FiX } from "react-icons/fi";
+import { interDetailFriendListData } from "../../../../../../../store/interface";
+
+interface ButtonProps {
+  friend: interDetailFriendListData;
+}
 
 const RejectIconHint = (
   <Tooltip
@@ -20,7 +25,7 @@ const RejectIconHint = (
     거절
   </Tooltip>
 );
-function RejectButton() {
+function RejectButton({ friend }: ButtonProps) {
   return (
     <RejectButtons>
       <OverlayTrigger placement="top" overlay={RejectIconHint}>

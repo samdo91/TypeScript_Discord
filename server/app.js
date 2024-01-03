@@ -379,6 +379,103 @@ app.post("/addFriend", async (req, res) => {
   }
 });
 
+app.post("/accepFriend", async (req, res) => {
+  const { userId, friendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({
+        status: "fail",
+        message: "사용자 또는 친구를 찾을 수 없습니다.",
+      });
+    }
+
+    // 사용자의 친구 상태 업데이트
+    const userFriend = user.friendList.find(
+      (friend) => friend._id === friendId
+    );
+    if (userFriend) {
+      userFriend.friendState = "friend";
+    }
+
+    // 친구의 친구 상태 업데이트
+    const friendUser = friend.friendList.find((user) => user._id === userId);
+    if (friendUser) {
+      friendUser.friendState = "friend";
+    }
+
+    // 변경 사항 저장
+    await user.save();
+    await friend.save();
+
+    // friendList를 사용하여 detailFriendListData 생성
+    const userDataPromises = user.friendList.map(async (friend) => {
+      try {
+        // friend의 id를 사용하여 데이터베이스에서 해당 유저 데이터를 가져옴
+        const friendUserData = await User.findById(friend._id).select(
+          "-password"
+        );
+
+        // friendUserData가 존재하고 meChannelData가 존재하며 비어 있지 않은 경우에만 첫 번째 요소를 가져옴
+        const meChannelData =
+          friendUserData &&
+          friendUserData.meChannelData &&
+          friendUserData.meChannelData[0];
+
+        const friendData = {
+          _id: friend._id,
+          email: friendUserData.email,
+          nickname: friendUserData.nickname,
+          isOnline: friendUserData.isOnline,
+          friendRequestType: friend.friendRequestType,
+          src: meChannelData ? meChannelData.src : "",
+          alt: meChannelData ? meChannelData.alt : "",
+          href: meChannelData ? meChannelData.href : "",
+          text: meChannelData ? meChannelData.text : "",
+          friendState:
+            typeof friend.friendState === "string"
+              ? friend.friendState
+              : String(friend.friendState),
+        };
+
+        // userData.detailFriendListData에 추가
+        user.detailFriendListData.push(friendData);
+
+        return friendData;
+      } catch (error) {
+        console.error("Error fetching friendUserData:", error);
+        return null;
+      }
+    });
+
+    const userDataArray = await Promise.all(userDataPromises);
+    const validUserDataArray = userDataArray.filter(
+      (userData) => userData !== null
+    );
+
+    // 업데이트된 isOnline 필드로 문서 저장
+    await user.save();
+
+    // 최종적으로 userData.detailFriendListData에 할당
+    user.detailFriendListData = validUserDataArray;
+
+    // 사용자 정보를 클라이언트에 응답
+    res.json({
+      userData: user,
+      status: "success",
+      message: "친구 수락 성공.",
+    });
+  } catch (error) {
+    console.error("친구 수락 중 오류:", error);
+    res.status(500).json({
+      status: "error",
+      message: "내부 서버 오류.",
+    });
+  }
+});
 // 3000 포트로 서버 오픈
 app.listen(3000, function () {
   console.log("Express server is listening on port 3000");

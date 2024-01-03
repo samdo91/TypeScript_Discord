@@ -2,6 +2,14 @@ import styled from "@emotion/styled";
 import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaCheck } from "react-icons/fa6";
+import { interDetailFriendListData } from "../../../../../../../store/interface";
+import { userDataAtom } from "../../../../../../../global/global";
+import { useAtom } from "jotai";
+import axios from "axios";
+
+interface ButtonProps {
+  friend: interDetailFriendListData;
+}
 
 const AcceptIconHint = (
   <Tooltip
@@ -21,9 +29,25 @@ const AcceptIconHint = (
   </Tooltip>
 );
 
-function AcceptButton() {
+function AcceptButton({ friend }: ButtonProps) {
+  const [userData, setUserData] = useAtom(userDataAtom);
+  const handleAccepButton = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/accepFriend", {
+        userId: userData._id,
+        friendId: friend._id,
+      });
+      setUserData(response.data.userData);
+      // 응답을 처리하고 로컬 상태를 업데이트합니다.
+      // 예를 들어, 새로운 데이터로 userDataAtom을 업데이트할 수 있습니다.
+    } catch (error) {
+      console.error("친구 수락 중 오류:", error);
+      // 필요한 경우 오류를 처리합니다.
+    }
+  };
+
   return (
-    <AcceptButtons>
+    <AcceptButtons onClick={handleAccepButton}>
       <OverlayTrigger placement="top" overlay={AcceptIconHint}>
         <AcceptIcon>
           <FaCheck />
