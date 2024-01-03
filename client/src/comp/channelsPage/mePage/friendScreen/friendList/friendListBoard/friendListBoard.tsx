@@ -3,6 +3,9 @@ import React from "react";
 import { initialFriendListStateAtom } from "../../../../../../global/global";
 import { interDetailFriendListData } from "../../../../../../store/interface";
 import styled from "@emotion/styled";
+import { FaCheck } from "react-icons/fa6";
+import { FiX } from "react-icons/fi";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export interface interFriendListSProps {
   setFriendList: React.Dispatch<
@@ -10,6 +13,36 @@ export interface interFriendListSProps {
   >;
   friendList: interDetailFriendListData[];
 }
+
+const AcceptIconHint = (
+  <Tooltip
+    id="tooltip"
+    style={{
+      backgroundColor: "#242424",
+      color: "white",
+      padding: "5px",
+      borderRadius: "8px",
+      fontSize: "20px",
+    }}
+  >
+    수락
+  </Tooltip>
+);
+
+const RejectIconHint = (
+  <Tooltip
+    id="tooltip"
+    style={{
+      backgroundColor: "#242424",
+      color: "white",
+      padding: "5px",
+      borderRadius: "8px",
+      fontSize: "20px",
+    }}
+  >
+    거절
+  </Tooltip>
+);
 
 function FriendListBoard({ friendList, setFriendList }: interFriendListSProps) {
   const [friendListState, setFriendListState] = useAtom(
@@ -27,25 +60,44 @@ function FriendListBoard({ friendList, setFriendList }: interFriendListSProps) {
           {friendList.map((friend) => {
             return (
               <WaitingItem key={friend._id}>
-                <img
-                  src={friend.src}
-                  width="50px"
-                  height="50px"
-                  alt={friend.alt}
-                  style={{
-                    margin: "5px",
-                    marginTop: "20px",
-                    borderRadius: "30px",
-                  }}
-                ></img>
-                <WaitingName>
-                  <div>{friend.nickname}</div>
-                  <div>
-                    {friend.friendRequestType === "Outgoing"
-                      ? "보낸 친구 요청"
-                      : "받은 친구 요청"}
-                  </div>
-                </WaitingName>
+                <WaitingImgNameSection>
+                  <img
+                    src={friend.src}
+                    width="50px"
+                    height="50px"
+                    alt={friend.alt}
+                    style={{
+                      margin: "5px",
+                      marginTop: "20px",
+                      borderRadius: "30px",
+                    }}
+                  ></img>
+                  <WaitingNameSection>
+                    <WaitingName>{friend.nickname}</WaitingName>
+                    <RequestType>
+                      {friend.friendRequestType === "Outgoing"
+                        ? "보낸 친구 요청"
+                        : "받은 친구 요청"}
+                    </RequestType>
+                  </WaitingNameSection>
+                </WaitingImgNameSection>
+                <AcceptRejectButtonSection>
+                  <AcceptButton>
+                    <OverlayTrigger placement="top" overlay={AcceptIconHint}>
+                      <AcceptIcon>
+                        <FaCheck />
+                      </AcceptIcon>
+                    </OverlayTrigger>
+                  </AcceptButton>
+
+                  <RejectButton>
+                    <OverlayTrigger placement="top" overlay={RejectIconHint}>
+                      <RejectIcon>
+                        <FiX />
+                      </RejectIcon>
+                    </OverlayTrigger>
+                  </RejectButton>
+                </AcceptRejectButtonSection>
               </WaitingItem>
             );
           })}
@@ -88,6 +140,7 @@ const WaitingBoard = styled.div`
 
 const WaitingItem = styled.div`
   display: flex;
+  justify-content: space-between;
   width: 90%;
   margin: 40px auto;
   height: 100px;
@@ -97,9 +150,69 @@ const WaitingItem = styled.div`
   }
   border-radius: 10px;
 `;
-const WaitingName = styled.div`
+const WaitingImgNameSection = styled.div`
+  display: flex;
+`;
+const WaitingNameSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  margin-left: 20px;
+`;
+
+const WaitingName = styled.div`
+  font-size: 23px;
+`;
+
+const RequestType = styled.div`
+  font-size: 18px;
+  color: rgba(126, 126, 126);
+`;
+
+const AcceptRejectButtonSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AcceptButton = styled.button`
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  margin: 5px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 15px;
+  border: none;
+  background-color: #1f1f1f;
+`;
+
+const RejectButton = styled.button`
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  margin: 5px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 15px;
+  border: none;
+  background-color: #1f1f1f;
+`;
+const AcceptIcon = styled.div`
+  margin-left: auto;
+  font-size: 27px;
+  color: rgba(126, 126, 126);
+  &:hover {
+    color: green;
+  }
+`;
+
+const RejectIcon = styled.div`
+  margin-left: auto;
+  font-size: 27px;
+  color: rgba(126, 126, 126);
+  &:hover {
+    color: red;
+  }
 `;
