@@ -61,7 +61,9 @@ const FriendListComponent: React.FC<{
         <OnlineBoard friendList={friendList} setFriendList={setFriendList} />
       );
     case "allFriend":
-      return <AllFriendBoard />;
+      return (
+        <AllFriendBoard friendList={friendList} setFriendList={setFriendList} />
+      );
     default:
       return null; // 기본값 처리
   }
