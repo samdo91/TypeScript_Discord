@@ -5,7 +5,6 @@ import styled from "@emotion/styled";
 function OnlineBoard({ friendList, setFriendList }: interFriendListSProps) {
   return (
     <OnlineBoards>
-      {" "}
       {friendList.map((friend) => {
         return (
           <OnlineItem key={friend._id}>
