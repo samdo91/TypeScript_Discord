@@ -24,7 +24,7 @@ function OnlineFriendsList() {
 
     if (friendListState.status === "online") {
       filteredFriends = userData.detailFriendListData.filter(
-        (friend) => friend.friendState === "friend"
+        (friend) => friend.friendState === "friend" && friend.isOnline === true
       );
     } else {
       const friendStateFilter =
