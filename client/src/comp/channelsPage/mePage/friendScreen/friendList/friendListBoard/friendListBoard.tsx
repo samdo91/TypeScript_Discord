@@ -3,9 +3,9 @@ import React from "react";
 import { initialFriendListStateAtom } from "../../../../../../global/global";
 import { interDetailFriendListData } from "../../../../../../store/interface";
 import styled from "@emotion/styled";
-import { FaCheck } from "react-icons/fa6";
-import { FiX } from "react-icons/fi";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import AcceptButton from "./buttons/acceptButton";
+import RejectButton from "./buttons/rejectButton";
+import CancelButton from "./buttons/cancelButton";
 
 export interface interFriendListSProps {
   setFriendList: React.Dispatch<
@@ -13,36 +13,6 @@ export interface interFriendListSProps {
   >;
   friendList: interDetailFriendListData[];
 }
-
-const AcceptIconHint = (
-  <Tooltip
-    id="tooltip"
-    style={{
-      backgroundColor: "#242424",
-      color: "white",
-      padding: "5px",
-      borderRadius: "8px",
-      fontSize: "20px",
-    }}
-  >
-    수락
-  </Tooltip>
-);
-
-const RejectIconHint = (
-  <Tooltip
-    id="tooltip"
-    style={{
-      backgroundColor: "#242424",
-      color: "white",
-      padding: "5px",
-      borderRadius: "8px",
-      fontSize: "20px",
-    }}
-  >
-    거절
-  </Tooltip>
-);
 
 function FriendListBoard({ friendList, setFriendList }: interFriendListSProps) {
   const [friendListState, setFriendListState] = useAtom(
@@ -81,23 +51,16 @@ function FriendListBoard({ friendList, setFriendList }: interFriendListSProps) {
                     </RequestType>
                   </WaitingNameSection>
                 </WaitingImgNameSection>
-                <AcceptRejectButtonSection>
-                  <AcceptButton>
-                    <OverlayTrigger placement="top" overlay={AcceptIconHint}>
-                      <AcceptIcon>
-                        <FaCheck />
-                      </AcceptIcon>
-                    </OverlayTrigger>
-                  </AcceptButton>
-
-                  <RejectButton>
-                    <OverlayTrigger placement="top" overlay={RejectIconHint}>
-                      <RejectIcon>
-                        <FiX />
-                      </RejectIcon>
-                    </OverlayTrigger>
-                  </RejectButton>
-                </AcceptRejectButtonSection>
+                {friend.friendRequestType === "Outgoing" ? (
+                  <AcceptRejectButtonSection>
+                    <CancelButton />
+                  </AcceptRejectButtonSection>
+                ) : (
+                  <AcceptRejectButtonSection>
+                    <AcceptButton />
+                    <RejectButton />
+                  </AcceptRejectButtonSection>
+                )}
               </WaitingItem>
             );
           })}
@@ -174,45 +137,4 @@ const AcceptRejectButtonSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const AcceptButton = styled.button`
-  width: 50px;
-  height: 50px;
-  border-radius: 30px;
-  margin: 5px;
-  margin-bottom: 20px;
-  margin-left: 10px;
-  margin-right: 15px;
-  border: none;
-  background-color: #1f1f1f;
-`;
-
-const RejectButton = styled.button`
-  width: 50px;
-  height: 50px;
-  border-radius: 30px;
-  margin: 5px;
-  margin-bottom: 20px;
-  margin-left: 10px;
-  margin-right: 15px;
-  border: none;
-  background-color: #1f1f1f;
-`;
-const AcceptIcon = styled.div`
-  margin-left: auto;
-  font-size: 27px;
-  color: rgba(126, 126, 126);
-  &:hover {
-    color: green;
-  }
-`;
-
-const RejectIcon = styled.div`
-  margin-left: auto;
-  font-size: 27px;
-  color: rgba(126, 126, 126);
-  &:hover {
-    color: red;
-  }
 `;
