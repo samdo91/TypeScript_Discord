@@ -20,7 +20,7 @@ const EtcIconHint = (
       textAlign: "center",
     }}
   >
-    수락
+    기타
   </Tooltip>
 );
 
