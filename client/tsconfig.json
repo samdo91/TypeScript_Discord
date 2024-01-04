@@ -18,6 +18,6 @@
   },
   "include": [
     "src",
-    "src/comp/channelsPage/mePage/friendScreen/friendList/friendListBoard/buttons/.tsx"
+    "src/comp/channelsPage/mePage/friendScreen/friendList/friendListBoard/buttons/acceptButton.tsx"
   ]
 }
