@@ -1,6 +1,8 @@
 import React from "react";
 import { interFriendListSProps } from "./waitingBoard";
 import styled from "@emotion/styled";
+import SendMessageButton from "../buttons/sendMessageButton";
+import EtcButton from "../buttons/EtcButton";
 
 function OnlineBoard({ friendList, setFriendList }: interFriendListSProps) {
   return (
@@ -27,7 +29,10 @@ function OnlineBoard({ friendList, setFriendList }: interFriendListSProps) {
                 </RequestType>
               </OnlineNameSection>
             </OnlineImgNameSection>
-            <AcceptRejectButtonSection></AcceptRejectButtonSection>
+            <AcceptRejectButtonSection>
+              <SendMessageButton friend={friend} />
+              <EtcButton friend={friend} />
+            </AcceptRejectButtonSection>
           </OnlineItem>
         );
       })}

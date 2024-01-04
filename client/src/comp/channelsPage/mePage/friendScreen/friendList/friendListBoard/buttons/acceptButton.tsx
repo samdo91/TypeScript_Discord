@@ -33,7 +33,7 @@ function AcceptButton({ friend }: ButtonProps) {
   const [userData, setUserData] = useAtom(userDataAtom);
   const handleAccepButton = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/accepFriend", {
+      const response = await axios.post("http://localhost:3000/acceptFriend", {
         userId: userData._id,
         friendId: friend._id,
       });
