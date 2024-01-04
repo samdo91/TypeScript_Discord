@@ -7,7 +7,7 @@ import { userDataAtom } from "../../../../../../../global/global";
 import { useAtom } from "jotai";
 import axios from "axios";
 
-interface ButtonProps {
+export interface ButtonProps {
   friend: interDetailFriendListData;
 }
 
