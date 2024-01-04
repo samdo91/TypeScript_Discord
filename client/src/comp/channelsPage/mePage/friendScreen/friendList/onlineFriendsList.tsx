@@ -38,16 +38,49 @@ function OnlineFriendsList() {
     }
 
     if (currentSearch) {
-      filteredFriends = filteredFriends.filter((friend) =>
-        friend._id.includes(currentSearch)
-      );
+      SearchFriend(filteredFriends);
+    } else {
+      // currentSearch가 비어있을 때는 모든 친구를 보여줍니다.
+      setFriendList(filteredFriends);
     }
 
-    setFriendList(filteredFriends);
-
     // 여기에서 friendList의 최신 상태를 올바르게 기록합니다.
-    console.log("FriendListFriendList", filteredFriends);
+    console.log("FriendListFriendList", friendList);
   }, [friendListState, userData, currentSearch]);
+
+  const SearchFriend = (filteredFriends: any) => {
+    const friendLists: any = [];
+
+    friendList.forEach((friend) => {
+      const friendNickname = friend.nickname.toString().toLowerCase();
+      const currentSearchString = currentSearch.toString().toLowerCase();
+
+      let match = true;
+
+      // friend.nickname과 currentSearch를 철자 하나하나씩 앞에서부터 비교합니다.
+      for (let i = 0; i < currentSearchString.length; i++) {
+        // 만약 문자가 일치하지 않으면 match를 false로 설정하고 루프를 종료합니다.
+        if (friendNickname[i] !== currentSearchString[i]) {
+          match = false;
+          break;
+        }
+      }
+
+      // 모든 문자가 일치하면 searchFriendList에 추가합니다.
+      if (match) {
+        friendLists.push(friend);
+      }
+    });
+
+    if (friendLists.length <= 1) {
+      // filteredFriends에 friendLists를 할당합니다.
+      filteredFriends = [...friendLists];
+    } else {
+      filteredFriends = [];
+    }
+
+    console.log("filteredFriends", filteredFriends);
+  };
 
   return (
     <OnlineFriendsLists>
@@ -87,7 +120,6 @@ export default OnlineFriendsList;
 
 const OnlineFriendsLists = styled.div`
   display: flex;
-
   flex-direction: column;
   border-bottom: 1px solid #3e3e3e;
   box-shadow: 1px 0.5px 0 #3e3e3e;
@@ -106,7 +138,6 @@ const SearchBarWrapper = styled.div`
 
 const SearchBar = styled.input`
   display: flex;
-
   align-items: center;
   width: 100%;
   height: 40px;
@@ -120,8 +151,6 @@ const SearchIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  align-items: center;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -130,6 +159,6 @@ const SearchIcon = styled.div`
 `;
 
 const Icon = styled.div`
-  margin-left: auto; /* Pushes the icon to the right within the flex container */
+  margin-left: auto;
   font-size: 27px;
 `;
