@@ -1,6 +1,8 @@
 import React from "react";
 import { interFriendListSProps } from "./waitingBoard";
 import styled from "@emotion/styled";
+import SendMessageButton from "../buttons/sendMessageButton";
+import EtcButton from "../buttons/EtcButton";
 
 function AllFriendBoard({ friendList, setFriendList }: interFriendListSProps) {
   return (
@@ -27,7 +29,10 @@ function AllFriendBoard({ friendList, setFriendList }: interFriendListSProps) {
                 </RequestType>
               </AllFriendNameSection>
             </AllFriendImgNameSection>
-            <AcceptRejectButtonSection></AcceptRejectButtonSection>
+            <AcceptRejectButtonSection>
+              <SendMessageButton friend={friend} />
+              <EtcButton friend={friend} />
+            </AcceptRejectButtonSection>
           </AllFriendItem>
         );
       })}
